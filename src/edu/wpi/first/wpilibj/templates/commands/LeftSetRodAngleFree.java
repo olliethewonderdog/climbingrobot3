@@ -52,13 +52,15 @@ public class LeftSetRodAngleFree extends CommandBase {
     }
 
     // Make this return true when this Command no longer needs to run execute()
+    // tapelength has reached goal
+    // servo has reached goal
     protected boolean isFinished() {
         //calulates final servo position for 
         double servValfinal;
         servValfinal =
      leftrod.calcServoFromAngle(true, Math.toRadians(dGoaltAng),goalTapeLength);
         double t;
-        t= leftrod.getTapeLength();
+        t=leftrod.getTapeLength();
         boolean tapeDone;
         tapeDone= (Math.abs(t-goalTapeLength)<.3);      
         boolean servDone;
