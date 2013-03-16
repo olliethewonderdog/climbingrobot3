@@ -13,9 +13,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class ClimbThirdRung extends CommandGroup {
 
     public ClimbThirdRung() {
-        
         // will duplicate ClimbSecondRung
-        
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

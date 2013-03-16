@@ -36,7 +36,7 @@ public class LeftPulley extends PIDSubsystem {
     private static final double pawlLock = RobotMap.P_LEFT_LOCK_LOCKED;
     private static final double pawlOpen = RobotMap.P_LEFT_LOCK_OPEN;
     // Move the oulley at half velocity for now (Values from 0 to 1
-    private static final double pulleyVelocity = .5;
+    private static double pulleyVelocity = .5;
     private static final double stop = 0.;
     // Error limits for the setTapelength method
     private static final double pulleyErrorMax = 1;
@@ -89,15 +89,17 @@ public class LeftPulley extends PIDSubsystem {
         return length;
 
     }
-    
 
     /**
-     * 
-     * Simply extends or retracts tape,depending on the sign of
-     * longer until its length is within "error" of "goalLength"
+     *
+     * Simply extends or retracts tape,depending on the sign of longer until its
+     * length is within "error" of "goalLength"
+     *
      * @param goalLength is target length
      * @param error is positive number that sets how close you want to target
-     * @param longer specifies direction and is positive if you are extending
+     * @param longer specifies direction and is positive if you are extending It
+     * is 1 if you're extending and -1 if you are retracting We are trying to
+     * avoid using the PID with this simple a
      */
     public void setTapelength(double goalLength, double error, int longer) {
         double curLength = getTapeLength();
@@ -120,10 +122,27 @@ public class LeftPulley extends PIDSubsystem {
         if (error > pulleyErrorMax || error < pulleyErrorMin) {   //check for bad error value
             error = pulleyErrorMin;
         }
+        // longer is either +1 or -1
+        // If longer is positive, the current length will be <  the goal length
+        // If longer is negative, the current length will be > the goal length
+        // In either case above  the product is positive. If it overshoots 
+        // the goal, the product will go negative and the motor will stop.
+        // Will it overshoot? It might . The side pulleys turn at about 
+        // 74 rpm or 7 to 8 inches per scond noload, tho about half that
+        // under load so say 3.5 to 8 inches per second or about .07 to .17
+        // inches per cycle. The error is .1, Currently the velocity is pegged 
+        // to 50% so the range per cycle is .035 to .085
+        // Just in case I'll add a slow down whe we get within an inch
+        //
+        if ((-longer * (curLength - goalLength)) > 1) {
+            pulleyVelocity = .25;
+        }
         if ((-longer * (curLength - goalLength)) > error) {
-            pulleyMotor.set(longer * pulleyVelocity * direct);         // sign of velocity is adjusted 
-            //by "direct" (+ or - 1)
-            //for motor orientation
+            // sign of velocity is adjusted 
+            // by "direct" (+ or - 1)
+            // for motor orientation
+            pulleyMotor.set(longer * pulleyVelocity * direct);
+
         } else {
             pulleyMotor.set(stop);
         }
@@ -131,8 +150,9 @@ public class LeftPulley extends PIDSubsystem {
 
     /**
      * Locks or unlocks the pawl depending setting of "locked"
+     *
      * @param locked
-     * 
+     *
      * @return true if locked, false if open
      */
     public boolean setLock(boolean locked) {
@@ -141,11 +161,12 @@ public class LeftPulley extends PIDSubsystem {
             // publish the state. Used in setTapeLength ()
             leftPawlLocked = true;
             return true;
-        } // If extending a locked tape, the pawl will not release until force on it 
-        // is relaxed, therefore
+        } // If extending a locked tape, the pawl will not release until
+        //  force on it is relaxed, therefore
         // Retract tape a little bit to releive pressure before unlocking it;
         else {
-            this.setTapelength(.3, .1, -1);
+
+            this.setTapelength(this.getTapeLength() - .1, .1, -1);
         }
         pawl.set(pawlOpen);
         // Publish the state

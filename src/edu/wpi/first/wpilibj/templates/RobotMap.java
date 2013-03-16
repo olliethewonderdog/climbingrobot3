@@ -76,9 +76,9 @@ public class RobotMap {
     public static final double G_SERVO_OPEN = .1;
 //Operator Input
     // Joysticks
-    public static final int HUTCH_STICK = 1;        //top
-    public static final int COOKER_STICK_1 = 2;      //left
-    public static final int COOKER_STICK_2 = 3;      //right
+    public static final int DRIVESTICK = 1;        //top
+    public static final int LeftStick = 2;      //left
+    public static final int RightStick = 3;      //right
     //Pot Constants
     public static final int TOP_PULLEY_CHAN = 4;
     public static final int LEFT_PULLEY_CHAN = 3;
@@ -87,4 +87,7 @@ public class RobotMap {
     public static final int GYRO_CHAN = 1;   // Made up for now... TODO make sure these channels match
 /// ROBOT GEOMETRY
     // ARENA GEOMETRY
+    // various other parameters
+    //Values
+    double ClimbAssist = .3;
 }

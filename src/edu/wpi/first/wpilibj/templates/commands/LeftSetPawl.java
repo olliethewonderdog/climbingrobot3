@@ -9,11 +9,12 @@ package edu.wpi.first.wpilibj.templates.commands;
  * @author Brinton
  */
 public class LeftSetPawl extends CommandBase {
+
     private boolean pawlPosition;
 
     public LeftSetPawl(boolean pawlposition) {
         requires(leftpulley);
-        pawlPosition =pawlposition;
+        pawlPosition = pawlposition;
     }
 
     // Called just before this Command runs the first time
@@ -22,7 +23,7 @@ public class LeftSetPawl extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-       leftpulley.setLock(pawlPosition);
+        leftpulley.setLock(pawlPosition);
     }
 
     // Make this return true when this Command no longer needs to run execute()

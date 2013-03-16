@@ -2,19 +2,18 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-    //Values of a, b and c, the coefficients of a quadratic equation 
-    //  y=ax*x+bx+c which gives tapelength as a function of pot value, which is 
-    // voltage between 0 and 5
-    // This equation is particular to each pulley.
-    //
+    // need some buttons
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
@@ -45,7 +44,87 @@ public class OI {
     //Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);  
 
     //public double getFrameAngle() {
-        //double frameangle = gyro.getAngle();
-        //return Math.toRadians(frameangle);
-    //}
+    //double frameangle = gyro.getAngle();
+    //return Math.toRadians(frameangle);
+    protected Joystick driveStick;
+    protected Joystick leftStick;
+    protected Joystick rightStick;
+    // Wills buttons
+    protected Button driveMode;
+    protected Button wAngle;
+    protected Button wLength;
+    // Left Buttons
+    protected Button lAngle;
+    protected Button lLength;
+    protected Button lLock;
+    protected Button lULock;
+    protected Button lAdjust;
+    //Right Buttons
+    protected Button rAngle;
+    protected Button rLength;
+    protected Button rLock;
+    protected Button rULock;
+    protected Button rAdjust;
+
+    public OI() {
+        driveStick = new Joystick(RobotMap.DRIVESTICK);
+        leftStick = new Joystick(RobotMap.LeftStick);
+        rightStick = new Joystick(RobotMap.RightStick);
+        initButtons();
+    }
+
+    private void initButtons() {
+        // Wills buttons
+        driveMode = new JoystickButton(driveStick, 1);
+        wAngle = new JoystickButton(driveStick, 4);
+        wLength = new JoystickButton(driveStick, 5);
+
+        //Right Buttons
+        rAngle = new JoystickButton(rightStick, 1);
+        rLength = new JoystickButton(rightStick, 2);
+        rLock = new JoystickButton(rightStick, 4);
+        rULock = new JoystickButton(rightStick, 5);
+        rAdjust = new JoystickButton(rightStick, 8);
+
+        //Left Buttons
+        lAngle = new JoystickButton(leftStick, 1);
+        lLength = new JoystickButton(leftStick, 2);
+        lLock = new JoystickButton(leftStick, 4);
+        lULock = new JoystickButton(leftStick, 5);
+        lAdjust = new JoystickButton(leftStick, 8);
+
+        //Assign the buttons to their commands
+        tieButtons();
+    }
+
+    private void tieButtons() {
+        //Wills buttons
+        //driveMode.whenPressed(new DriveMode());
+        //wAngle.whenPressed(new WillAngle());
+        //wLength.whenPressed(new WillLength());
+        //Right buttons
+        //rAngle.whenPressed(new RightPulleyAngle());
+        //rLength.whenPressed(new RightPulleyExtend());
+        //rLock.whenPressed(new RightPulleyLock(true));
+        //rULock.whenPressed(new RightPulleyLock(false));
+        //rAdjust.whenPressed(new RightPulleyAdjust());
+        //Left buttons
+        //lAngle.whenPressed(new LeftPulleyAngle());
+        //lLength.whenPressed(new LeftPulleyExtend());
+        //lLock.whenPressed(new LeftPulleyLock(true));
+        //lULock.whenPressed(new LeftPulleyLock(false));
+        //lAdjust.whenPressed(new LeftPulleyAdjust());
+    }
+
+    public Joystick getDriveStick() {
+        return driveStick;
+    }
+
+    public Joystick getLeftStick() {
+        return leftStick;
+    }
+
+    public Joystick getRightStick() {
+        return rightStick;
+    }
 }

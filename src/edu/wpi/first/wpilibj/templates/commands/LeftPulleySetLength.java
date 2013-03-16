@@ -9,11 +9,10 @@ package edu.wpi.first.wpilibj.templates.commands;
  * @author Brinton
  */
 public class LeftPulleySetLength extends CommandBase {
-  
+
     // possibly combine servo and pulley?
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-
     LeftPulleySetLength(double T, double e, int d) {
         requires(leftpulley);                                //only 1 subsystem per command
         tapeLength = T;
@@ -29,8 +28,9 @@ public class LeftPulleySetLength extends CommandBase {
     }
 
     // Called repeatedly when this Command is scheduled to run
+    //possible conflict between 2 error values?
     protected void execute() {
-        leftpulley.setTapelength(tapeLength, error, direction);//possible conflict between 2 error values?
+        leftpulley.setTapelength(tapeLength, error, direction);
     }
 
     // Make this return true when this Command no longer needs to run execute()

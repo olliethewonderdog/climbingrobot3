@@ -31,6 +31,6 @@ public class PrepareFirstRung extends CommandGroup {
         // arm.
         addParallel(new LeftSetRodAngleFree(75, 36));
         addParallel(new LeftPulleySetLength(36, .1, 1));
-     
+
     }
 }

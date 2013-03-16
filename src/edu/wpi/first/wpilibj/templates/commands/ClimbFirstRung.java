@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
  * @author Brinton
  */
 public class ClimbFirstRung extends CommandGroup {
-Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);
+
+    Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);
     private double dFrameAngle;
+
     public ClimbFirstRung() {
         //a Add Commands here:
         // e.g. addSequential(new Command1());
@@ -32,16 +34,16 @@ Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-        
-        
+
+
         addSequential(new LeftSetPawl(true));
         addParallel(new LeftPulleySetLength(1, .1, -1));
-        addParallel(new LeftRodAngleFollowTape(true,1));
-        //addSequential(new LeftSetPawl(true));
+        addParallel(new LeftRodAngleFollowTape(true, 1));
+        //addSequential(new RightSetPawl(true));
         //addParallel(new RightPulleySetLength(1, .1, -1));
         //addParallel(new RightAngleFollowTape(true,1));
         dFrameAngle = gyro.getAngle();
         //addParallel(new TopSetRodAngleFree(85-dFrameAngle,20));
-        
+
     }
 }
