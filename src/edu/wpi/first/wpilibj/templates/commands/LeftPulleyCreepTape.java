@@ -7,10 +7,10 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author laptop
  */
-public class CreepTape extends CommandBase {
+public class LeftPulleyCreepTape extends CommandBase {
      double speed;
     
-    public CreepTape(double time, double speedFraction) {
+    public LeftPulleyCreepTape(double time, double speedFraction) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(leftpulley);

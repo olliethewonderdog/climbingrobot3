@@ -147,20 +147,22 @@ public class LeftPulley extends PIDSubsystem {
             pulleyMotor.set(stop);
         }
     }
+
     public void setCreepTape(double speed) {
         double curLength = getTapeLength();
         // if there is an attempt to extend a locked pulley, Don't do it. stop motor
         // and return
         // Change outcome to unlock and extend?
-        if (leftPawlLocked = true)  {
+        if (leftPawlLocked = true) {
             pulleyMotor.set(stop);
             return;
         }
-            // sign of velocity is adjusted 
-            // by "direct" (+ or - 1)
-            // for motor orientation
-            pulleyMotor.set(speed * direct);
+        // sign of velocity is adjusted 
+        // by "direct" (+ or - 1)
+        // for motor orientation
+        pulleyMotor.set(speed * direct);
     }
+
     /**
      * Locks or unlocks the pawl depending setting of "locked"
      *
@@ -174,24 +176,25 @@ public class LeftPulley extends PIDSubsystem {
             // publish the state. Used in setTapeLength ()
             leftPawlLocked = true;
             return true;
-        } // If extending a locked tape, the pawl will not release until
-        //  force on it is relaxed, therefore
+        } 
+        // If extending a locked tape,ie locked is false
+        //  the pawl will not release until the
+        //  force on it is relaxed, therefore unlock it and
         // Retract tape a little bit to releive pressure before unlocking it;
+        // which will allow pawl to open
         else {
-
+            pawl.set(pawlOpen);
             this.setTapeLength(this.getTapeLength() - .1, .1, -1);
+            leftPawlLocked = false;
         }
-        pawl.set(pawlOpen);
-        // Publish the state
-        leftPawlLocked = false;
+        // Publish the state      
         return false;
-
     }
 
     //Set the default command to drive with joysticks
     public void initDefaultCommand() {
         //setDefaultCommand(new JoystickleftPulley()); 
-         pulleyMotor.set(stop);
+        pulleyMotor.set(stop);
     }
 
     /**
@@ -200,7 +203,7 @@ public class LeftPulley extends PIDSubsystem {
      */
     protected double returnPIDInput() {
         return this.getTapeLength();
-        
+
     }
 
     /**
