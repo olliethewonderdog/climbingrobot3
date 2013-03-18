@@ -101,7 +101,7 @@ public class LeftPulley extends PIDSubsystem {
      * is 1 if you're extending and -1 if you are retracting We are trying to
      * avoid using the PID with this simple a
      */
-    public void setTapelength(double goalLength, double error, int longer) {
+    public void setTapeLength(double goalLength, double error, int longer) {
         double curLength = getTapeLength();
         // if there is an attempt to extend a locked pulley, Don't do it. stop motor
         // and return
@@ -147,7 +147,20 @@ public class LeftPulley extends PIDSubsystem {
             pulleyMotor.set(stop);
         }
     }
-
+    public void setCreepTape(double speed) {
+        double curLength = getTapeLength();
+        // if there is an attempt to extend a locked pulley, Don't do it. stop motor
+        // and return
+        // Change outcome to unlock and extend?
+        if (leftPawlLocked = true)  {
+            pulleyMotor.set(stop);
+            return;
+        }
+            // sign of velocity is adjusted 
+            // by "direct" (+ or - 1)
+            // for motor orientation
+            pulleyMotor.set(speed * direct);
+    }
     /**
      * Locks or unlocks the pawl depending setting of "locked"
      *
@@ -166,7 +179,7 @@ public class LeftPulley extends PIDSubsystem {
         // Retract tape a little bit to releive pressure before unlocking it;
         else {
 
-            this.setTapelength(this.getTapeLength() - .1, .1, -1);
+            this.setTapeLength(this.getTapeLength() - .1, .1, -1);
         }
         pawl.set(pawlOpen);
         // Publish the state
@@ -178,7 +191,7 @@ public class LeftPulley extends PIDSubsystem {
     //Set the default command to drive with joysticks
     public void initDefaultCommand() {
         //setDefaultCommand(new JoystickleftPulley()); 
-        // TO DO need to get joystick settings
+         pulleyMotor.set(stop);
     }
 
     /**
@@ -187,6 +200,7 @@ public class LeftPulley extends PIDSubsystem {
      */
     protected double returnPIDInput() {
         return this.getTapeLength();
+        
     }
 
     /**

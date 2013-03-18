@@ -14,11 +14,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  * @author Brinton
- *
- *
  */
 public class LeftRod extends PIDSubsystem {
 // We don't use pid values at this time
+    // droo p =3inches at 42inches
+    //=.07*57=4
+    //leftservomax .453 back 181   delta 135
+    //leftservommin  0  forward 46
+    //rightservomax .744 forward 57 46  delta 100
+    //rightservomin .385 back 157
+    //midservomax  .78    -10   180 forward//.751= -10 degrees delta 190
+    //midservomin  .1  back 180
 
     private static final double Kp = 3;
     private static final double Ki = .2;
@@ -142,7 +148,7 @@ public class LeftRod extends PIDSubsystem {
      * @param dMaxDeflec maximum deflection of tape at 0 angle and full
      * extension
      */
-    protected double dMaxDeflec = 10;
+    protected double dMaxDeflec = 4;
     /**
      * @param servoDistanceAbovePulleyBottom in inches for side servo
      */
@@ -203,7 +209,9 @@ public class LeftRod extends PIDSubsystem {
         double currTapeLen = pulley.getTapeLength();
         double rFrameAngle = this.getFrameAngle();  //inradians
         double dTpAn = this.getClimbTapeAngle(floor, currTapeLen, rFrameAngle);
-        double dServVal = this.calcServoFromAngle(false, dTpAn, currTapeLen);
+        double rTpAn;
+        rTpAn=Math.toRadians(dTpAn);
+        double dServVal = this.calcServoFromAngle(false,rTpAn,currTapeLen);
         // Sets the servo by position given the current tape length
         this.setRodServoValue(dServVal);
     }
@@ -274,9 +282,9 @@ public class LeftRod extends PIDSubsystem {
                 k4 = k1 / Math.sin(rFrAng);
                 b = -2 * (k2 + k4 * k5 + k3 * k5);
                 c = MathUtils.pow(k2, 2) + MathUtils.pow(k3, 2) + MathUtils.pow(k4, 2) + 2 * (k3 * k4) - MathUtils.pow(T, 2);
-                smartdashboard.putNumber("Quad a", a);
-                smartdashboard.putNumber("Quad b", b);
-                smartdashboard.putNumber("Quad c", c);
+                SmartDashboard.putDouble("Quad a", a);
+                SmartDashboard.putDouble("Quad b", b);
+               SmartDashboard.putDouble("Quad c", c);
                 x2 = (-b - Math.sqrt(((b * b) - (4 * a * c)))) / (2 * a);
             }
             dTapeAngle = Math.toDegrees(m2) - dFrAng;
@@ -361,7 +369,7 @@ public class LeftRod extends PIDSubsystem {
         //
         /**
          * j5 is the angle of the rod end at the servo,that is, the servo angle,
-         * relative to the axis bewtween rod ends as a function of the distance
+         * relative to the axis between rod ends as a function of the distance
          * between the rod ends. The rods form a hoop. When the tape is fully
          * extended,say at 45 inches, the angle is about 45 degrees. When tape
          * is fully contracted, j4 approaches zero and this angle is 134
@@ -382,13 +390,17 @@ public class LeftRod extends PIDSubsystem {
         // The empirically derived linear relationship between servo input value
         // and servo angle relative to the frame
         // Particular to a pulley
-        double sVal = -.0248 + .0033 * j7;
-        smartdashboard.putNumber("j2", j2);
-        smartdashboard.putNumber("j3", j3);
-        smartdashboard.putNumber("j4 distance rod ends", j4);
-        smartdashboard.putNumber("j5 servo angle to rod axis", j5);
-        smartdashboard.putNumber("j6 rod axis to frame", j6);
-        smartdashboard.putNumber("j7 servo angle to frame", j7);
+        // old double sVal = -.0248 + .0033 * j7;
+        // just changed with new servo
+        double sVal = +.2665 + .0033 * j7;
+        //double right sVal = .9486 - .0036 * j7;
+        //double middle sVal = .7442 - .0036 * j7;
+        SmartDashboard.putDouble("j2", j2);
+        SmartDashboard.putDouble("j3", j3);
+        SmartDashboard.putDouble("j4 distance rod ends", j4);
+        SmartDashboard.putDouble("j5 servo angle to rod axis", j5);
+        SmartDashboard.putDouble("j6 rod axis to frame", j6);
+        SmartDashboard.putDouble("j7 servo angle to frame", j7);
         //servo.set(sVal);
         return sVal;
     }
@@ -460,35 +472,41 @@ public class LeftRod extends PIDSubsystem {
      * @return new value for the rod servo that is a small increment to its
      * previous value
      */
-    public boolean setRodServoVelocity(double serVel, double goalVal, double error) {
+    public void setRodServoVelocity(double serVel, double goalVal, double error) {
         double curVal = servo.get();
         double increVal = serVel * maxServoVelocity;
         // if we are geeting so close to the target value that the increment
         // exceeds the error, cut the increment in half.
-        if (increVal > error) {
+        if (increVal > error) 
             increVal = .5 * error;
+       if (serVel > 1) {
+               serVel = 1.;
+         }
+        if (serVel < 0.0) {
+            serVel = 0.0;
         }
         if (Math.abs(curVal - goalVal) < error) {
-            return true;
-        } else if (serVel > 1) {
-            serVel = 1;
-        } else if (serVel < 0) {
-            serVel = 0;
-        } else if ((goalVal > curVal)
+            servo.set(goalVal);
+        return;
+        }  if ((goalVal > curVal)
                 & ((Math.abs(goalVal - (curVal + increVal))) > error)) {
             servo.set(curVal + increVal);
-            return false;
-        } else if (Math.abs(goalVal - (curVal + increVal)) <= error) {
-            return true;
-        }
+            return;
+        }  if (Math.abs(goalVal - (curVal + increVal)) <= error) {
+           servo.set(goalVal);
+           return;
+        }  
         if ((goalVal < curVal) & (Math.abs(goalVal - (curVal - increVal)) > error)) {
             servo.set(curVal - increVal);
-            return false;
-        } else if (Math.abs(goalVal - (curVal - increVal)) <= error) {
-            return true;
+            return;
         }
-        return false;
-    }
+        if (Math.abs(goalVal - (curVal - increVal)) <= error) {
+            servo.set(goalVal);
+            return;
+        }
+        } 
+    
+    
 
     // set default joystick
     public void initDefaultCommand() {

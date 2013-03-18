@@ -30,7 +30,7 @@ public class LeftPulleySetLength extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     //possible conflict between 2 error values?
     protected void execute() {
-        leftpulley.setTapelength(tapeLength, error, direction);
+        leftpulley.setTapeLength(tapeLength, error, direction);
     }
 
     // Make this return true when this Command no longer needs to run execute()

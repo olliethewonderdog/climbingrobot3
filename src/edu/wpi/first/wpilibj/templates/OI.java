@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.templates.commands.ClimbFirstRung;
+import edu.wpi.first.wpilibj.templates.commands.PrepareFirstRung;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -47,51 +49,55 @@ public class OI {
     //double frameangle = gyro.getAngle();
     //return Math.toRadians(frameangle);
     protected Joystick driveStick;
-    protected Joystick leftStick;
-    protected Joystick rightStick;
+   // protected Joystick leftStick;
+    //protected Joystick rightStick;
     // Wills buttons
-    protected Button driveMode;
-    protected Button wAngle;
-    protected Button wLength;
+    //protected Button driveMode;
+    protected Button pRungOne;
+    //protected Button wAngle;
+    protected Button climbRungOne;
+    //protected Button wLength;
     // Left Buttons
-    protected Button lAngle;
-    protected Button lLength;
-    protected Button lLock;
-    protected Button lULock;
-    protected Button lAdjust;
+   // protected Button lAngle;
+    //protected Button lLength;
+   // protected Button lLock;
+    //protected Button lULock;
+   // protected Button lAdjust;
     //Right Buttons
-    protected Button rAngle;
-    protected Button rLength;
-    protected Button rLock;
-    protected Button rULock;
-    protected Button rAdjust;
+    //protected Button rAngle;
+    //protected Button rLength;
+    //protected Button rLock;
+   // protected Button rULock;
+   // protected Button rAdjust;
 
     public OI() {
         driveStick = new Joystick(RobotMap.DRIVESTICK);
-        leftStick = new Joystick(RobotMap.LeftStick);
-        rightStick = new Joystick(RobotMap.RightStick);
+        //leftStick = new Joystick(RobotMap.LeftStick);
+        //rightStick = new Joystick(RobotMap.RightStick);
         initButtons();
     }
 
     private void initButtons() {
         // Wills buttons
-        driveMode = new JoystickButton(driveStick, 1);
-        wAngle = new JoystickButton(driveStick, 4);
-        wLength = new JoystickButton(driveStick, 5);
+        //driveMode = new JoystickButton(driveStick, 1);
+        pRungOne= new JoystickButton(driveStick, 4);
+        climbRungOne= new JoystickButton(driveStick, 5);
+        //wAngle = new JoystickButton(driveStick, 4);
+        //wLength = new JoystickButton(driveStick, 5);
 
         //Right Buttons
-        rAngle = new JoystickButton(rightStick, 1);
-        rLength = new JoystickButton(rightStick, 2);
-        rLock = new JoystickButton(rightStick, 4);
-        rULock = new JoystickButton(rightStick, 5);
-        rAdjust = new JoystickButton(rightStick, 8);
+       // rAngle = new JoystickButton(rightStick, 1);
+       // rLength = new JoystickButton(rightStick, 2);
+        //rLock = new JoystickButton(rightStick, 4);
+       // rULock = new JoystickButton(rightStick, 5);
+       // rAdjust = new JoystickButton(rightStick, 8);
 
         //Left Buttons
-        lAngle = new JoystickButton(leftStick, 1);
-        lLength = new JoystickButton(leftStick, 2);
-        lLock = new JoystickButton(leftStick, 4);
-        lULock = new JoystickButton(leftStick, 5);
-        lAdjust = new JoystickButton(leftStick, 8);
+        //lAngle = new JoystickButton(leftStick, 1);
+       // lLength = new JoystickButton(leftStick, 2);
+       // lLock = new JoystickButton(leftStick, 4);
+       // lULock = new JoystickButton(leftStick, 5);
+        //lAdjust = new JoystickButton(leftStick, 8);
 
         //Assign the buttons to their commands
         tieButtons();
@@ -100,6 +106,8 @@ public class OI {
     private void tieButtons() {
         //Wills buttons
         //driveMode.whenPressed(new DriveMode());
+        pRungOne.whenPressed(new PrepareFirstRung());
+        climbRungOne.whenPressed(new ClimbFirstRung());
         //wAngle.whenPressed(new WillAngle());
         //wLength.whenPressed(new WillLength());
         //Right buttons
@@ -120,11 +128,11 @@ public class OI {
         return driveStick;
     }
 
-    public Joystick getLeftStick() {
-        return leftStick;
-    }
+    //public Joystick getLeftStick() {
+    //    return leftStick;
+    //}
 
-    public Joystick getRightStick() {
-        return rightStick;
-    }
+    //public Joystick getRightStick() {
+    //    return rightStick;
+   // }
 }

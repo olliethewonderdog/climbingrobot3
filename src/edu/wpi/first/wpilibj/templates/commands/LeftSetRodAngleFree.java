@@ -17,7 +17,6 @@ public class LeftSetRodAngleFree extends CommandBase {
     private double goalTapeLength;
     private double error;
     private double dGoaltAng;
-    SmartDashboard smartdashboard;
 
     public LeftSetRodAngleFree(double dTAng, double T) {
         // Use requires() here to declare subsystem dependencies
@@ -44,9 +43,9 @@ public class LeftSetRodAngleFree extends CommandBase {
      */
     protected void execute() {
         // 
-        smartdashboard.putNumber("Left Tape Length", leftrod.getTapeLength());
-        smartdashboard.putNumber("Frame Angle", leftrod.getFrameAngle());
-        smartdashboard.putNumber("Left Rod Servo",
+        SmartDashboard.putDouble("RodAnglefree Left Tape Length", leftrod.getTapeLength());
+        SmartDashboard.putDouble("RodAnglefree Frame Angle", leftrod.getFrameAngle());
+        SmartDashboard.putDouble("RodAnglefree Left Rod Servo",
                 leftrod.calcServoFromAngle(
                 false, Math.toRadians(dGoaltAng), leftrod.getTapeLength()));
         leftrod.setRodAngleFree(.33, dGoaltAng);
