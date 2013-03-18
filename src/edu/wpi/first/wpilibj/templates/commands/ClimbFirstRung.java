@@ -37,10 +37,10 @@ public class ClimbFirstRung extends CommandGroup {
 
 
         addSequential(new LeftSetPawl(true));
-        addParallel(new LeftPulleySetLength(1, .1, -1));
+        addParallel(new LeftPulleySetLength(5.5, .1, -1));
         addParallel(new LeftRodAngleFollowTape(true, 1));
         //addSequential(new RightSetPawl(true));
-        //addParallel(new RightPulleySetLength(1, .1, -1));
+        //addParallel(new RightPulleySetLength(5.5, .1, -1));
         //addParallel(new RightAngleFollowTape(true,1));
         dFrameAngle = gyro.getAngle();
         //addParallel(new TopSetRodAngleFree(85-dFrameAngle,20));
