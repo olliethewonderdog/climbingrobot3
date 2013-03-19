@@ -282,13 +282,15 @@ public class LeftRod extends PIDSubsystem {
                 k4 = k1 / Math.sin(rFrAng);
                 b = -2 * (k2 + k4 * k5 + k3 * k5);
                 c = MathUtils.pow(k2, 2) + MathUtils.pow(k3, 2) + MathUtils.pow(k4, 2) + 2 * (k3 * k4) - MathUtils.pow(T, 2);
-                SmartDashboard.putDouble("Quad a", a);
-                SmartDashboard.putDouble("Quad b", b);
-               SmartDashboard.putDouble("Quad c", c);
+                SmartDashboard.putNumber("left Quad a", a);
+                SmartDashboard.putNumber("left Quad b", b);
+               SmartDashboard.putNumber("left Quad c", c);
                 x2 = (-b - Math.sqrt(((b * b) - (4 * a * c)))) / (2 * a);
             }
             dTapeAngle = Math.toDegrees(m2) - dFrAng;
+            SmartDashboard.putNumber("leftdTapeAngle", dTapeAngle);
             return dTapeAngle;
+             
         }
     }
 
@@ -331,20 +333,24 @@ public class LeftRod extends PIDSubsystem {
          * @param droop if true make the adjustment to target tape angle
          */
         // inititialize angTapHoriz
-        double angTapHoriz;
-        angTapHoriz = 0;
+        double rangTapHoriz;
+        rangTapHoriz = 0;
         if (droop) {
 
-            angTapHoriz = rTaAng + this.getFrameAngle();
+            rangTapHoriz = rTaAng + this.getFrameAngle();
         }
+        SmartDashboard.putNumber("leftrangTapHoriz",rangTapHoriz);
+        SmartDashboard.putNumber("leftrTaAng", rTaAng);
+         SmartDashboard.putBoolean("leftdroop", droop);
         /**
          * @param adjTargetAnglefactor will be between 0 and 1. It is normalized
          * relative to an expected deflection of
          * @param dMaxDeflec degrees at 45 inches
          *
          */
-        double adjTargetAnglefactor = (T * T * T * Math.cos(angTapHoriz)
-                * Math.cos(angTapHoriz)) / (45 * 45 * 45);
+        double adjTargetAnglefactor = (T * T * T * Math.cos(rangTapHoriz)
+                * Math.cos(rangTapHoriz)) / (45 * 45 * 45);
+        SmartDashboard.putNumber("adjTargetAnglefactor", adjTargetAnglefactor);
         //
         //Add the adjustment to the target angle
         //
@@ -359,13 +365,16 @@ public class LeftRod extends PIDSubsystem {
          * Apply Pythagorean theorem.
          */
         j2 = Math.sin(rTaAng) * T - servoDistanceAbovePulleyBottom;
+         SmartDashboard.putNumber("left rod axis vert dist", j2);
         j3 = Math.cos(rTaAng) * T + servoDistanceBehindPulleyBottom;
+         SmartDashboard.putNumber("leftrod axis horz dist j3", j3);
         /**
          * j4 is distance between rod ends, for a given tapelength and tape
          * angle to the frame, based on relative position of pulley bottom and
          * servo
          */
         j4 = Math.sqrt((j2 * j2) + (j3 * j3));
+         SmartDashboard.putNumber("left distance betw rod ends", j4);
         //
         /**
          * j5 is the angle of the rod end at the servo,that is, the servo angle,
@@ -377,22 +386,31 @@ public class LeftRod extends PIDSubsystem {
          * between distance between the rod ends and the angle formed by the rod
          * end, at the servo, to the axis connecting the rod ends.
          */
-        j5 = 134 - 2.046 * j4;
+        j5 = 190 - 3.046 * j4;//check
+         SmartDashboard.putNumber("Angle of servo to rod axis deg j5", j5);
         /**
-         * j6 is the angle the rod axis makes to the frame.
+         * j6 is the angle the rod axis makes to the tape.
          */
-        j6 = Math.toDegrees(MathUtils.atan(j2 / j3));
+        if (j3!=0){
+            j6 = Math.toDegrees(MathUtils.atan(j2/j3));
+             }
+           else { 
+            j6=0 ;          
+        }
+         SmartDashboard.putNumber("Angle of rod axis to tape deg", j6);
         /**
          * j7 is the angle that the rod end at the servo makes to the frame. It
          * therefore the servo angle to the frame.
          */
         j7 = j5 + j6;
+        SmartDashboard.putNumber("Angle of left servo to tape deg", j7);
         // The empirically derived linear relationship between servo input value
         // and servo angle relative to the frame
         // Particular to a pulley
         // old double sVal = -.0248 + .0033 * j7;
         // just changed with new servo
         double sVal = +.2665 + .0033 * j7;
+        SmartDashboard.putNumber("leftServo value", sVal);
         //double right sVal = .9486 - .0036 * j7;
         //double middle sVal = .7442 - .0036 * j7;
         SmartDashboard.putDouble("j2", j2);

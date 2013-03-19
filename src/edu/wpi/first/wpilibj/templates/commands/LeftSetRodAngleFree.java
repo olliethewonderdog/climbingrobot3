@@ -43,9 +43,11 @@ public class LeftSetRodAngleFree extends CommandBase {
      */
     protected void execute() {
         // 
-        SmartDashboard.putDouble("RodAnglefree Left Tape Length", leftrod.getTapeLength());
-        SmartDashboard.putDouble("RodAnglefree Frame Angle", leftrod.getFrameAngle());
-        SmartDashboard.putDouble("RodAnglefree Left Rod Servo",
+        SmartDashboard.putNumber("RodAnglefree"
+                + " Left Tape Length", leftrod.getTapeLength());
+        SmartDashboard.putNumber("RodAnglefree"
+                + " Frame Angle", leftrod.getFrameAngle());
+        SmartDashboard.putNumber("RodAnglefree Left Rod Servo",
                 leftrod.calcServoFromAngle(
                 false, Math.toRadians(dGoaltAng), leftrod.getTapeLength()));
         leftrod.setRodAngleFree(.33, dGoaltAng);

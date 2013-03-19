@@ -34,12 +34,12 @@ public class LeftRodAngleFollowTape extends CommandBase {
         double rframeangle;
         double dtapeangle;
         tapelength = leftrod.getTapeLength();
-        SmartDashboard.putDouble("Follow Tape Tape Length", tapelength);
+        SmartDashboard.putNumber("leftFollowTape TapeLength left", tapelength);
         rframeangle = leftrod.getFrameAngle();
-        SmartDashboard.putDouble("Follow Tape Frame Angle", rframeangle);
+        SmartDashboard.putNumber("leftFollowTape Frame Angle ", rframeangle);
         dtapeangle = leftrod.getClimbTapeAngle(floor, tapelength, rframeangle);
-       SmartDashboard.putDouble("Follow Tape Climb Tape Angle", dtapeangle);
-        SmartDashboard.putDouble("Follow Tape Servo Value",
+       SmartDashboard.putNumber("leftFollowTape Climb Tape Angle", dtapeangle);
+        SmartDashboard.putNumber("leftFollowTape Servo Value",
         leftrod.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal));
         leftrod.adjustAngleClimbing(floor);
 

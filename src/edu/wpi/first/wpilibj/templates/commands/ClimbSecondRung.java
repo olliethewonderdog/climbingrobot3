@@ -30,12 +30,12 @@ public class ClimbSecondRung extends CommandGroup {
         // 1.Extend top pulley to 45 inches while maintaining rod angle of 45
         // degrees below the frame
 
-        // addParallel(new TopPulleySetLength(45,.1,1);
-        // addParallel(new TopSetRodAngleFree(.33,-45);
+        // addParallel(new TopPulleySetLength(45,.1,1));
+        // addParallel(new TopSetRodAngleFree(-45,45));
 
         // 2.Lower the top rod to 60 degrees to hook rung
 
-        // addSequential(new TopSetRodAngleFree(.33,-60);
+        // addSequential(new TopSetRodAngleFree(-60,45));
 
         // 3. Retract top tape to 26 inches 
         //
@@ -47,7 +47,7 @@ public class ClimbSecondRung extends CommandGroup {
         // otherwise it executes the whole set of consecutive parallel commands
         // in parallel. 
         // 
-        // addSequential (newTopPulleyCreepTape(.1,.1);
+        // addSequential (newTopPulleyCreepTape(.1,.1));
         //
         // 5. Unlock pawls on sides while creeping center tape.
         // Issue: since the top pulley does not have a pawl
@@ -63,7 +63,7 @@ public class ClimbSecondRung extends CommandGroup {
         //
         addParallel(new LeftSetPawl(false));
         // addParallel(new RightSetPawl(false));
-        // addParallel (new TopPulleyCreepTape(.5,.1);
+        // addParallel (new TopPulleyCreepTape(.5,.1));
         //
         // 6. Get  frameangle in degrees
         //
@@ -72,18 +72,18 @@ public class ClimbSecondRung extends CommandGroup {
         // 7. Add a a trivial command to break up the consecutive parallel commands.
         // In this case,creep for one tenth of a second.
 
-        // addSequential (new TopPulleyCreepTape(.1,.1);
+        // addSequential (new TopPulleyCreepTape(.1,.1));
 
         // 8.Extend the side tapes to reach the next rung  
         // at an angle that will allow them to hook the rung.
         //  Hold position with the center tape while they do this.
         //  Allow 5 seconds for the extension.( 2 may be enough)
         //
-        //addParallel (new TopPulleyCreepTape(5,.1);
-        addParallel(new LeftPulleySetLength(35, .1, 1));
-        addParallel(new LeftSetRodAngleFree(.33, 85 - dFrameAngle));
-        // addParallel(new RightPulleySetLength(35,.1,1));
-        // addParallel(new RightSetRodAngleFree(.33,85-dframeangle);
+        //addParallel (new TopPulleyCreepTape(5,.1));
+        addParallel(new LeftPulleySetLength(37, .1, 1));
+        addParallel(new LeftSetRodAngleFree( 85 - dFrameAngle,37));
+        // addParallel(new RightPulleySetLength(37,.1,1));
+        // addParallel(new RightSetRodAngleFree(85-dframeangle,37));
         //
         // 9.Add a a trivial command to break up the consecutive parallel command.
         // In this case,creep for one tenth of a second. 
@@ -92,20 +92,20 @@ public class ClimbSecondRung extends CommandGroup {
         //
         // 10. Now lower the side rods to hook the rung. Allow two seconds
         //
-        // addParallel (new TopPulleyCreepTape(2,.1);
-        addParallel(new LeftSetRodAngleFree(.33, 60 - dFrameAngle));
-        // addParallel(new RightSetRodAngleFree(.33,60-frameangle));
+        // addParallel (new TopPulleyCreepTape(2,.1));
+        addParallel(new LeftSetRodAngleFree( 60 - dFrameAngle,37));
+        // addParallel(new RightSetRodAngleFree(60-dframeangle,37));
         //
         // 11.Add a a trivial command to break up the consecutive parallel command.
         // In this case,creep for one tenth of a second. 
         //
-        // addSequential (new TopPulleyCreepTape(.1,.1);
+        // addSequential (new TopPulleyCreepTape(.1,.1));
         //
         // 12.  Lock side pawls and retract the side tapes to 20 inches,
         // maintaining angle. Creep for  2 seconds to hold
         // position till the pawls lock
         //
-        //addParallel (new TopPulleyCreepTape(1,.1);
+        //addParallel (new TopPulleyCreepTape(1,.1));
         addParallel(new LeftSetPawl(true));
         // addParallel (new RightSetPawl(true));
         addParallel(new LeftPulleySetLength(20, .1, -1));
@@ -116,9 +116,9 @@ public class ClimbSecondRung extends CommandGroup {
         // 13. LIft up center rod angle  based on frameangle
         dFrameAngle = gyro.getAngle();
         //
-        // addSequential(new TopSetRodAngleFree(.33,85-dFrameAngle);
+        // addSequential(new TopSetRodAngleFree(85-dFrameAngle,25));
         //
-        // 14. Retract sidetapes to 1 inch
+        // 14. Retract sidetapes to 5.5 inch
         //
         //
         addParallel(new LeftPulleySetLength(5.5, .1, -1));
