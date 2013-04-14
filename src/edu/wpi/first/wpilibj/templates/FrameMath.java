@@ -36,15 +36,17 @@ public final class FrameMath {
     /**
      * @param static RNGVERDIST s the height of the first pyramid rung above floor and
      * the higher pyramid rungs above the middle of the next lower rung
+     * (formerly k2)
      */
     protected  static double RNGVERDIST = 30.75;
     /**
      * @param static RNGHORIZDIST is horizontal distance between rungs
+     *  (formerly k3)
      */
     protected  static double RNGHORIZDIST = 12.1;
     /**
      * @param FLRHANGLENG tapelength at which the robot climbing from the floor
-     * breaks free
+     * breaks free 
      */
     protected  static double FLRHANGLENG = 10.5;
     /**
@@ -125,7 +127,7 @@ public final class FrameMath {
         } 
         else // Get here when climbing between rungs... not from floor
         {
-            if (T < 13.1 & dFrAng < 60) // Breaking free angle plus length condition
+            if (T < RUNGHANGLENG & dFrAng < RUNGHANGANG) // Breaking free angle plus length condition
             {
                 dTapeAngle = 90 - dFrAng;
                 return dTapeAngle;
@@ -246,7 +248,8 @@ public final class FrameMath {
          * The next two parameters specify the distance of the servo relative 
          * to the pulley bottom. They are stored in an array.
          * @param servHeightPullBott 
-         * @param servDistBehindPull Apply Pythagorean
+         * @param servDistBehindPull 
+         * Apply Pythagorean
          * theorem.
          */
          double [] [] servRodPosition;
