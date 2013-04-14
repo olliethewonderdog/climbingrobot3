@@ -26,7 +26,8 @@ public class LeftRodDoNothing extends CommandBase {
     protected void execute() {
         double s;
         s=leftrod.getRodServo();
-         SmartDashboard.putDouble("Doing nothing Rod servo value=",s );
+        leftrod.setRodServoValue(s);
+         SmartDashboard.putNumber("Doing nothing Rod servo value=",s );
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -41,5 +42,6 @@ public class LeftRodDoNothing extends CommandBase {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        end();
     }
 }
