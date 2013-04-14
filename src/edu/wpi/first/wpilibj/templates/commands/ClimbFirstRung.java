@@ -19,8 +19,6 @@ public class ClimbFirstRung extends CommandGroup {
 private double dframeAngle;
 
     public ClimbFirstRung() {
-       
-
         addSequential(new LeftSetPawl(true));
         addSequential(new RightSetPawl(true));
         addParallel(new LeftPulleySetLength(11, .2,-.8));

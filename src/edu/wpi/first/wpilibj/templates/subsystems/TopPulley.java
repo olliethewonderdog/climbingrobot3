@@ -8,16 +8,14 @@ import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.SI;
 import edu.wpi.first.wpilibj.templates.commands.TopPulleyDoNothing;
-
 /**
  *
- * @author laptop
+ * 
  */
 public class TopPulley extends Pulley {
        private static final double Kp = 0.0;
         private static final double Ki = 0.0;
         private static final double Kd = 0.0;  
-
     // Initialize your subsystem here
     public TopPulley() {
        super("toppulley",Kp,Ki,Kd);
@@ -34,22 +32,18 @@ public class TopPulley extends Pulley {
        * Motor direction is +1 or -1 depending on its orientation in the robot
        */
        direct = RobotMap.P_TOP_MOTOR_DIR;
-        pulleyMotor = new Jaguar(RobotMap.P_TOP_JAG_CAR, RobotMap.P_TOP_JAG_CHAN);
-       
-        // Use these to get going:
-        // setSetpoint() -  Sets where the PID controller should move the system
-        //                  to
-        // enable() - Enables the PID controller.
+       pulleyMotor = new Jaguar(RobotMap.P_TOP_JAG_CAR, RobotMap.P_TOP_JAG_CHAN);
+       pulleyNumber=0;
     }
     public double getTapeLength() {
         double v =SI.getTop();
-        double length= FrameMath.potParam [0][0]*v+ FrameMath.potParam [0][1]
+        double length= FrameMath.potParam [pulleyNumber][0]*v+ FrameMath.potParam [pulleyNumber][1]
                 +hooklen;
         return length; 
     } 
+    //No pawl reference in this toppulley version.
       public void setTape(double velocity) {
         // speed is positive to extend,negative to retract
- 
         // sign of velocity is adjusted 
         // by "direct" (+ or - 1)
         // for motor orientation
@@ -57,7 +51,8 @@ public class TopPulley extends Pulley {
         pulleyMotor.set(velocity * direct);
     }
        /**
-     *This code is deprecated because we now allow the tape goal to be managed
+     * There is no pawl check in toppulley version.
+     * This code is deprecated because we now allow the tape goal to be managed
      * in the command.
      * Simply extends or retracts tape at velocity until its
      * length is within "error" of "goalLength"
@@ -69,9 +64,9 @@ public class TopPulley extends Pulley {
      * avoid using the PID with this simple a
      */
     public void setTapeLength(double goalLength, double error,double velocity) {
-        //Velocity is supposed to be positive if extending negative if retractin
+        // Velocity is supposed to be positive if extending negative if retractin
         // but we just use the absolute value and the goal Length to determine
-        //direction.
+        // direction.
         // Check for out of bounds tapelength goals
         goalLength=Math.max(Math.min(goalLength,tapeLenMax),tapeLenMin);
         double curLength = getTapeLength();
@@ -108,7 +103,6 @@ public class TopPulley extends Pulley {
             // by "direct" (+ or - 1)
             // for motor orientation
             pulleyMotor.set(extending * velocity * direct);
-
         } 
         else 
         {
@@ -118,14 +112,12 @@ public class TopPulley extends Pulley {
     public void initDefaultCommand() {
          setDefaultCommand(new TopPulleyDoNothing()); 
     }
-    
     protected double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         return 0.0;
     }
-    
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);

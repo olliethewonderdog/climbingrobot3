@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.command.WaitForChildren;
 public class ClimbNextRung extends CommandGroup {
 
     public ClimbNextRung() {
-
         //1.Extend top pulley to 45 inches while maintaining rod angle of 80 
         // degreesto horizon. Then pause
-        
          addParallel(new TopPulleySetLength(45,.1,.5));
          addParallel(new TopRodAngleFree(80,45));
          addSequential (new WaitForChildren());
@@ -79,6 +77,5 @@ public class ClimbNextRung extends CommandGroup {
         //
         //
         addSequential(new ClimbWithSidePulleys(false,6.5,6.5,.1,.1,-.8,-.7));
-        //
     }
 }

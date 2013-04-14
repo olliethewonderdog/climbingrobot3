@@ -18,8 +18,6 @@ public class LeftPulley extends Pulley {
        private static final double Kp = 0.0;
         private static final double Ki = 0.0;
         private static final double Kd = 0.0;  
-
-    // Initialize your subsystem here
     public LeftPulley() {
        super("leftpulley",Kp,Ki,Kd);
        name="left";
@@ -40,34 +38,29 @@ public class LeftPulley extends Pulley {
         pawlLock = RobotMap.P_LEFT_LOCK_LOCKED;
         pawlOpen = RobotMap.P_LEFT_LOCK_OPEN;
         pulleyMotor = new Jaguar(RobotMap.P_LEFT_JAG_CAR, RobotMap.P_LEFT_JAG_CHAN);
+        pulleyNumber=1;
         pawl = new Servo(RobotMap.P_LEFT_LOCK_CAR, RobotMap.P_LEFT_LOCK_CHAN);
         pawl.setBounds(244, 0, 0, 0, 11);
         //set pawl unlocked
         pawl.set(pawlOpen);
         pawlLocked = false;
-        // Use these to get going:
-        // setSetpoint() -  Sets where the PID controller should move the system
-        //                  to
-        // enable() - Enables the PID controller.
     }
      public double getTapeLength() {
         double v =SI.getLeft();
-        double length= FrameMath.potParam [1][0]*v+ FrameMath.potParam [1][1]
+        double length= FrameMath.potParam [pulleyNumber][0]*v+ 
+                FrameMath.potParam [pulleyNumber][1]
                 +hooklen;
         return length; 
     } 
-    
     public void initDefaultCommand() {
          setDefaultCommand(new LeftPulleyDoNothing()); 
     }
-    
     protected double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         return 0.0;
     }
-    
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);

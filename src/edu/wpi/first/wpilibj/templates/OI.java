@@ -48,8 +48,6 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     //
- 
-
     //public double getFrameAngle() {
     //double frameangle = gyro.getAngle();
     //return Math.toRadians(frameangle);

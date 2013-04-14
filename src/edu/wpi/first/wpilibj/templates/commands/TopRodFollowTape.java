@@ -33,26 +33,25 @@ public class TopRodFollowTape extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double tapelength;
-        double dtapeangle;
-        tapelength = toprod.getTapeLength();
-        SmartDashboard.putNumber("topFollowTape TapeLength top", tapelength);
-        SmartDashboard.putNumber("topFollowTape Frame Angle ",
+       double tapelength;
+       double dtapeangle;
+       tapelength = toprod.getTapeLength();
+       SmartDashboard.putNumber("topFollowTape TapeLength top", tapelength);
+       SmartDashboard.putNumber("topFollowTape Frame Angle ",
                     SI.getrFrameAngle());
        dtapeangle = FrameMath.getClimbTapeAngle(floor, tapelength, pulley);
        SmartDashboard.putNumber("topFollowTape Climb Tape Angle", 
                FrameMath.getClimbTapeAngle(floor, tapelength, pulley));
-        SmartDashboard.putNumber("topFollowTape Servo Value",
+       SmartDashboard.putNumber("topFollowTape Servo Value",
        FrameMath.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal,pulley));
+       
         toprod.adjustAngleClimbing(floor);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        // when is this finished? when tapelength within .5 icnes
-        double t1;
-        t1 = toprod.getTapeLength();
-        return (Math.abs(t1 - this.tapegoal) < error);
+        // when is this finished? when tapelength within error
+        return (Math.abs(toprod.getTapeLength() - this.tapegoal) < error);
     }
 
     // Called once after isFinished returns true

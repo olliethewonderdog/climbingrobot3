@@ -144,44 +144,50 @@ public abstract class Rod extends Subsystem {
     public void setRodServoVelocity(double serVel, double goalVal, double error) {
         double curVal = servo.get();
          if (serVel > 1) 
-       {
-               serVel = 1.;
-       }
-        if (serVel < 0.0) 
-        {
+         {
+            serVel = 1.;
+         }
+         if (serVel < 0.0) 
+         {
             serVel = 0.0;
-        }
-        double increVal = serVel * maxServoVelocity;
+         }
+         double increVal = serVel * maxServoVelocity;
         // if we are geeting so close to the target value that the increment
         // exceeds the error, cut the increment in half.
-        if (increVal > error) 
+         if (increVal > error) 
+         {
             increVal = .5 * error;
+         }
       
-        if (Math.abs(curVal - goalVal) < error) {
+         if (Math.abs(curVal - goalVal) < error) 
+         {
             servo.set(goalVal);
-        return;
-        }  if ((goalVal > curVal)
-                & ((Math.abs(goalVal - (curVal + increVal))) > error)) {
+            return;
+         }  
+         if ((goalVal > curVal)
+                & ((Math.abs(goalVal - (curVal + increVal))) > error)) 
+         {
             servo.set(curVal + increVal);
             return;
-        }  if (Math.abs(goalVal - (curVal + increVal)) <= error) {
+         }  
+         if (Math.abs(goalVal - (curVal + increVal)) <= error) 
+         {
            servo.set(goalVal);
            return;
-        }  
-        if ((goalVal < curVal) & (Math.abs(goalVal - (curVal - increVal)) > error)) {
+         }  
+         if ((goalVal < curVal) & (Math.abs(goalVal - (curVal - increVal)) > error))
+         {
             servo.set(curVal - increVal);
             return;
-        }
-        if (Math.abs(goalVal - (curVal - increVal)) <= error) {
+         }
+         if (Math.abs(goalVal - (curVal - increVal)) <= error)
+         {
             servo.set(goalVal);
-        }
-        } 
+         }
+    } 
  
     // set default joystick
     public void initDefaultCommand() {
-        //Use joystick
-        // Set the default command for a subsystem here.
-  
     }
 
  

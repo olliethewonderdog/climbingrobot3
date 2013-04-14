@@ -8,7 +8,12 @@ import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.OI;
 /**
  * We don't use the PID functionality at this time.
- *
+ * This abstract class contains the methods for extending or retracting the 
+ * tape with the pulleys, and getting its length (abstract only).
+ * It also handles the pawl locking and unlocking, which is complex because the
+ * pawls are hard to unlock.
+ * There is also a  method for setting the tape to a particular length, but it is not 
+ * used. That function is handled in the command ___pulleysetlength
  */
 public abstract class Pulley extends PIDSubsystem {
     protected String name;
@@ -20,20 +25,18 @@ public abstract class Pulley extends PIDSubsystem {
     protected double tapeLenMax;
     protected  double tapeLenMin ;
     protected double initialTapeLen ;
+    protected int pulleyNumber;
     /**
      * Motor direction is +1 or -1 depending on its orientation in the robot
      */
     protected int direct ;
     // The PWM values for the open and locked postions of the pawl
-    // May be able to set these in the servos themselves
     protected double pawlLock  ;
     protected double pawlOpen ;
-    // Move the oulley at half velocity for now (Values from 0 to 1)
     // Error limits for the setTapelength method
     protected int pulleyErrorMax;
     protected  double pulleyErrorMin ;
     protected double pulleyErrorDef;
-     
     /**
      * State of pawl lock
      */
@@ -42,7 +45,6 @@ public abstract class Pulley extends PIDSubsystem {
     Servo pawl;
     Timer timer;
     OI oi;
-    
     /**
      * Initialize the subsystem here
      */
@@ -61,20 +63,14 @@ public abstract class Pulley extends PIDSubsystem {
         //enable(); // - Enables the PID controller.
     /**
      * Gets tape length in inches as a function of voltage
-     *
+     * abstract because it reads a particular potntiometer
      * @return tape length in inches
-     * 
-     * 
      */
     public abstract double getTapeLength() ;
-    
-    
       public void setTape(double velocity) {
-        // speed is positive to extend,negative to retract
-        // if there is an attempt to extend a locked pulley, Don't do it. stop motor
-        // and return
-        // Change outcome to unlock and extend?
-        
+        // speed is positive to extend, negative to retract
+        // if there is an attempt to extend a locked pulley, Don't do it. 
+        // stop motor and return
         if (pawlLocked == true & velocity>0) {
             pulleyMotor.set(0);
             return;
@@ -111,13 +107,12 @@ public abstract class Pulley extends PIDSubsystem {
         * and return
         * Change outcome to unlock and extend?
         */
-      double extending=1;  
+      double extending =1;  
         if (curLength-goalLength>0) extending=-1;
         if (pawlLocked = true & (extending > 0)) {
             pulleyMotor.set(0);
             return;
         }
-      
         if (error > pulleyErrorMax || error < pulleyErrorMin) { //check for bad error value
             error = pulleyErrorMin;
         }
@@ -186,23 +181,30 @@ public abstract class Pulley extends PIDSubsystem {
          */
         else
         {
-            pawl.set(pawlOpen);
+         double minimumTapeExtension=.5;
+         int tapeRetractIterations=7;
+         double retractionVelocity=-.15;
+         double waitTimePerIteration=.05;
+         double extensionVelocity=.15;
+         double waitTimePerAttemptedRetraction=1;
+         //
+         pawl.set(pawlOpen);
            double startlength=this.getTapeLength();
            // Do this loop until the tape has extended .5 inches
-           // surrently stays in this loop until 
-           while (this.getTapeLength()-.5 < startlength)
+           // currently stays in this loop until 
+           while (this.getTapeLength()-minimumTapeExtension < startlength)
            {
-            for(int i=1; i<7; i++)
+            for(int i=1; i<tapeRetractIterations; i++)
             {
-                this.setTape(-.15);
-              Timer.delay(.05);
+                this.setTape(retractionVelocity);
+              Timer.delay(waitTimePerIteration);
               this.setTape(0);
              }
             startlength=this.getTapeLength();
             // Try to extend the tape
-            this.setTape(.15);
+            this.setTape(extensionVelocity);
             //should move more than half an inch in 1 second
-            Timer.delay(1);
+            Timer.delay(waitTimePerAttemptedRetraction);
             this.setTape(0);
            } 
             pawlLocked = false;
@@ -210,9 +212,8 @@ public abstract class Pulley extends PIDSubsystem {
         // Publish the state      
         return false;
     }
-    
     public void initDefaultCommand() {
-            
+       
     }
 
     /**

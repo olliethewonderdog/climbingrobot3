@@ -22,20 +22,16 @@ public class SI {
      * They signal when the middle pulley can stop stalling. and allow the 
      * command groups to pause at intervals to wait for the "nextCommand"
      * Arguably these last two should go in OI
-     */
-   
+     */ 
    protected static AnalogChannel top;
    protected static AnalogChannel left;
    protected static AnalogChannel right;
    protected static Gyro gyro;
-    
-
     public SI() {
         top = new AnalogChannel(RobotMap.TOP_PULLEY_CHAN);
         left = new AnalogChannel(RobotMap.LEFT_PULLEY_CHAN);
         right = new AnalogChannel(RobotMap.RIGHT_PULLEY_CHAN);
-        gyro = new Gyro (RobotMap.GYRO_CHAN);
-       
+        gyro = new Gyro (RobotMap.GYRO_CHAN);     
     }
     public static double getTop () {
         double v;
@@ -59,7 +55,6 @@ public class SI {
     }
     public static double getdFrameAngle() {
         return gyro.getAngle();
-
     }
     public static void reset() {
         gyro.reset();

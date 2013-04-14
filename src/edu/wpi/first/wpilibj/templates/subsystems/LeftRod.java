@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.commands.LeftRodDoNothing;
 import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.SI;
-
 /**
  *
  * @author Brinton
@@ -35,6 +34,4 @@ public class LeftRod extends Rod{
         // Set the default command for a subsystem here.
         setDefaultCommand(new LeftRodDoNothing());
     }
-
- 
 }

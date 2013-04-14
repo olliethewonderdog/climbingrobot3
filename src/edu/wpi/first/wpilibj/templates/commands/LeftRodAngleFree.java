@@ -18,8 +18,7 @@ public class LeftRodAngleFree extends CommandBase {
     private double dTapeAngToFloor;
     private int pulley;
     private double dTapeAngToFrame;
-    private double servoSpeed;
-    
+    private double servoSpeed; 
     public LeftRodAngleFree(double dTAng, double T) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

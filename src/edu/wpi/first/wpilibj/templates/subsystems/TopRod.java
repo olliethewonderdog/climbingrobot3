@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.SI;
 import edu.wpi.first.wpilibj.templates.commands.TopRodDoNothing;
 /**
- *
+ * Most of the methods used are in the parent class.
  * @author Brinton
  */
 public class TopRod extends Rod {
@@ -19,23 +19,16 @@ public class TopRod extends Rod {
         pulleyNumber=0;
     }
     /**
-     *
-     * @return
-     */
+     * Gets potentiometer voltage from SI and applies the calibrated parameters.
+     */ 
     public double getTapeLength() {
-        double v =SI.getTop();
-        double length= FrameMath.potParam [pulleyNumber][0]*v+
+        double v=SI.getTop();
+        double length=FrameMath.potParam [pulleyNumber][0]*v+
                 FrameMath.potParam [pulleyNumber][1];
         return length; 
     }
-    
-    // set default joystick
     public void initDefaultCommand() {
-        //Use joystick
-        // Set the default command for a subsystem here.
         setDefaultCommand(new TopRodDoNothing());
     }
-
- 
 }
 

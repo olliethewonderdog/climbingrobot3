@@ -8,7 +8,6 @@ package edu.wpi.first.wpilibj.templates.commands;
  * @author Brinton
  */
 public class LeftPulleySetLength extends CommandBase {
-
    double tapeLength;
     double error;
     double speed;
@@ -20,7 +19,6 @@ public class LeftPulleySetLength extends CommandBase {
         error = e;
         speed=s;
     }
-    
     // Called just before this Command runs the first time
 
     protected void initialize() {

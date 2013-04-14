@@ -8,13 +8,11 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.commands.RightRodDoNothing;
 import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.SI;
-
 /**
  *
  * @author Brinton
  */
 public class RightRod extends Rod {
-    
     // Initialize your subsystem here
     /**
      * this is a constructor
@@ -31,13 +29,7 @@ public class RightRod extends Rod {
                 FrameMath.potParam [pulleyNumber][1];
         return length; 
     }
-
-    // set default joystick
     public void initDefaultCommand() {
-        //Use joystick
-        // Set the default command for a subsystem here.
         setDefaultCommand(new RightRodDoNothing());
     }
-
- 
 }

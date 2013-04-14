@@ -48,7 +48,7 @@ public class TopRodAngleFree extends CommandBase {
     protected void execute() {
         // 
        
-            dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
+        dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
 
         SmartDashboard.putNumber("RodAnglefree"
                 + " Top Tape Length", toprod.getTapeLength());

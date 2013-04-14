@@ -21,6 +21,7 @@ public class TopRodDoNothing extends CommandBase {
     }
 
     // Called repeatedly when this Command is scheduled to run
+    // Sets servo to current value
     protected void execute() {
          double s;
         s=toprod.getRodServo();
@@ -32,7 +33,6 @@ public class TopRodDoNothing extends CommandBase {
     protected boolean isFinished() {
         return false;
     }
-
     // Called once after isFinished returns true
     protected void end() {
     }
