@@ -4,9 +4,9 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.templates.RobotMap;
+import edu.wpi.first.wpilibj.templates.SI;
+import edu.wpi.first.wpilibj.command.WaitForChildren;
 
 /**
  *
@@ -14,36 +14,26 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
  */
 public class ClimbFirstRung extends CommandGroup {
 
-    Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);
-    private double dFrameAngle;
+  SI si;
+  
+private double dframeAngle;
 
     public ClimbFirstRung() {
-        //a Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
-
+       
 
         addSequential(new LeftSetPawl(true));
-        addParallel(new LeftPulleySetLength(5.5, .1, -1));
-        addParallel(new LeftRodAngleFollowTape(true, 1));
-        //addSequential(new RightSetPawl(true));
-        //addParallel(new RightPulleySetLength(5.5, .1, -1));
-        //addParallel(new RightAngleFollowTape(true,1));
-        dFrameAngle = gyro.getAngle();
-        //addParallel(new TopSetRodAngleFree(85-dFrameAngle,20));
-
+        addSequential(new RightSetPawl(true));
+        addParallel(new LeftPulleySetLength(11, .2,-.8));
+        addParallel(new LeftRodFollowTape(true, 11));
+        addParallel(new RightPulleySetLength(11, .2, -.8));
+        addParallel(new RightRodFollowTape(true,11));
+        addParallel(new TopRodAngleFree(80,26));
+        addSequential(new WaitForChildren());
+        addParallel(new LeftPulleySetLength(6.5, .1,-.7));
+        addParallel(new LeftRodFollowTape(true, 6.5));
+        addParallel(new RightPulleySetLength(6.5, .1, -.7));
+        addParallel(new RightRodFollowTape(true,6.5));
+        addParallel(new TopRodAngleFree(80,26));
+        addSequential(new WaitForChildren());
     }
 }

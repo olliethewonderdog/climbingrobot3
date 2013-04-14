@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.templates.commands.CommandBase;
-import edu.wpi.first.wpilibj.templates.commands.ExampleCommand;
+//import edu.wpi.first.wpilibj.templates.commands.ExampleCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,15 +29,16 @@ public class Climber extends IterativeRobot {
      */
     public void robotInit() {
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+       // autonomousCommand = new ExampleCommand();
 
         // Initialize all subsystems
         CommandBase.init();
+        System.out.println("Good deploy" );
     }
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        autonomousCommand.start();
+       // autonomousCommand.start();
     }
 
     /**
@@ -52,7 +53,7 @@ public class Climber extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        autonomousCommand.cancel();
+       // autonomousCommand.cancel();
     }
 
     /**
@@ -60,5 +61,6 @@ public class Climber extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+         System.out.println("Teleop init");
     }
 }

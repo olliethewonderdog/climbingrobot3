@@ -3,129 +3,82 @@
  * and open the template in the editor.
  */
 package edu.wpi.first.wpilibj.templates.commands;
-
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.templates.RobotMap;
-
+import edu.wpi.first.wpilibj.command.WaitForChildren;
 /**
  *
  * @author Brinton
  */
-public class ClimbSecondRung extends CommandGroup {
+public class ClimbNextRung extends CommandGroup {
 
-    Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);
-    private double dFrameAngle;
+    public ClimbNextRung() {
 
-    public ClimbSecondRung() {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order. // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // 1.Extend top pulley to 45 inches while maintaining rod angle of 45
-        // degrees below the frame
-
-        // addParallel(new TopPulleySetLength(45,.1,1));
-        // addParallel(new TopSetRodAngleFree(-45,45));
-
-        // 2.Lower the top rod to 60 degrees to hook rung
-
-        // addSequential(new TopSetRodAngleFree(-60,45));
-
+        //1.Extend top pulley to 45 inches while maintaining rod angle of 80 
+        // degreesto horizon. Then pause
+        
+         addParallel(new TopPulleySetLength(45,.1,.5));
+         addParallel(new TopRodAngleFree(80,45));
+         addSequential (new WaitForChildren());
+         addSequential (new TopPause());
+         // resume when apprppriate
+        // 2.Lower the top rod to 60 degrees relative to horizon to hook rung 
+         // and pause
+         addSequential(new TopRodAngleFree(60,45));
+         addSequential(new TopPause());
+         //
         // 3. Retract top tape to 26 inches 
         //
-        // addParallel (new TopPulleySetLength(26,.1,-1));
-        // addParallel (new TopRodAngleFollowTape(26))
-        //
-        // 4.We need to break up sets parallel commands with a sequential command that 
-        // does something trivial, in this case, creep the center tape for a tenth of a second
-        // otherwise it executes the whole set of consecutive parallel commands
-        // in parallel. 
-        // 
-        // addSequential (newTopPulleyCreepTape(.1,.1));
-        //
-        // 5. Unlock pawls on sides while creeping center tape.
+         addParallel (new TopPulleySetLength(26,.1,-1));
+         addParallel (new TopRodFollowTape(false, 26));
+         addSequential (new WaitForChildren());
+         //  
+        // 4. Unlock pawls on sides while creeping center tape.
         // Issue: since the top pulley does not have a pawl
         // it will need to hold its position while the sidepulleys disengage 
         // from the the lower rung, extend and grab the upper rung.
         // The solution is a "CreepTape" command that retracts the pulley
-        // for a few seconds, at a fraction of its maximum voltage. Those 
-        // parameters,time and fractional speed, 
-        //  are a guess.  We will need to tune them.
-        // Here allow  .5 seconds for the pawls to disengage.
-        //during the CreepTape commands, we do not adjust the angle of the tape.
+        //  at a fraction of its maximum voltage. This 
+        // parameter fractional speed, 
+        //  are a guess.  We will need to tune it.
+        // during the CreepTape commands, we do not adjust the angle of the tape.
         // because the tapelength should not change enough to matter.
         //
-        addParallel(new LeftSetPawl(false));
-        // addParallel(new RightSetPawl(false));
-        // addParallel (new TopPulleyCreepTape(.5,.1));
+        addParallel (new TopPulleyCreepTape(-.1,60));
         //
-        // 6. Get  frameangle in degrees
+        addSequential(new LeftSetPawl(false));
+        addSequential(new RightSetPawl(false));
         //
-        dFrameAngle = gyro.getAngle();
-        //
-        // 7. Add a a trivial command to break up the consecutive parallel commands.
-        // In this case,creep for one tenth of a second.
-
-        // addSequential (new TopPulleyCreepTape(.1,.1));
-
-        // 8.Extend the side tapes to reach the next rung  
+        // 5.Extend the side tapes to reach the next rung  
         // at an angle that will allow them to hook the rung.
         //  Hold position with the center tape while they do this.
-        //  Allow 5 seconds for the extension.( 2 may be enough)
+        //  
+        addSequential(new ExtendSidePulleys(36.,36.,80.,80.,.7,.7,.5,.5));
         //
-        //addParallel (new TopPulleyCreepTape(5,.1));
-        addParallel(new LeftPulleySetLength(37, .1, 1));
-        addParallel(new LeftSetRodAngleFree( 85 - dFrameAngle,37));
-        // addParallel(new RightPulleySetLength(37,.1,1));
-        // addParallel(new RightSetRodAngleFree(85-dframeangle,37));
+        // 6. Now lower the side rods to hook the rung. 
         //
-        // 9.Add a a trivial command to break up the consecutive parallel command.
-        // In this case,creep for one tenth of a second. 
+        addSequential(new ExtendSidePulleys(36.,36.,60.,60.,.7,.7,.5,.5));
+        // 7..Pause sides
         //
-        // addSequential (new TopPulleyCreepTape(.1,.1);
+        addSequential (new SidePause());
+        // resume when ready
         //
-        // 10. Now lower the side rods to hook the rung. Allow two seconds
-        //
-        // addParallel (new TopPulleyCreepTape(2,.1));
-        addParallel(new LeftSetRodAngleFree( 60 - dFrameAngle,37));
-        // addParallel(new RightSetRodAngleFree(60-dframeangle,37));
-        //
-        // 11.Add a a trivial command to break up the consecutive parallel command.
-        // In this case,creep for one tenth of a second. 
-        //
-        // addSequential (new TopPulleyCreepTape(.1,.1));
-        //
-        // 12.  Lock side pawls and retract the side tapes to 20 inches,
+        // 8.  Lock side pawls and retract the side tapes to 20 inches,
         // maintaining angle. Creep for  2 seconds to hold
         // position till the pawls lock
         //
-        //addParallel (new TopPulleyCreepTape(1,.1));
-        addParallel(new LeftSetPawl(true));
-        // addParallel (new RightSetPawl(true));
-        addParallel(new LeftPulleySetLength(20, .1, -1));
-        addParallel(new LeftRodAngleFollowTape(false, 20));
-        // addParallel(new RightPulleySetLength(20,.1,-1));
-        // addParallel(new RightAdjustRodAngleClimb(false,20));
+         addSequential (new LeftSetPawl(true));
+         addSequential (new RightSetPawl(true));
+         addSequential (new ClimbWithSidePulleys(false,20,20,-.8,-.7,.5,.5));
         //
-        // 13. LIft up center rod angle  based on frameangle
-        dFrameAngle = gyro.getAngle();
+        // 9. Lift up center rod angle 
         //
-        // addSequential(new TopSetRodAngleFree(85-dFrameAngle,25));
+         addParallel(new TopPulleySetLength(28,.1,.5));
+         addParallel(new TopRodAngleFree(85,28));
         //
-        // 14. Retract sidetapes to 5.5 inch
+        // 10. Retract sidetapes to 6.5 inch
         //
         //
-        addParallel(new LeftPulleySetLength(5.5, .1, -1));
-        addParallel(new LeftRodAngleFollowTape(false, 1));
-        // addParallel(new RightPulleySetLength(5.5,.1,-1));
-        // addParallel(new RightRodAngleFollowTape(false),1);
+        addSequential(new ClimbWithSidePulleys(false,6.5,6.5,.1,.1,-.8,-.7));
         //
-
     }
 }

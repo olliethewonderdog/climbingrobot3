@@ -7,24 +7,23 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author Brinton
  */
-public class LeftPulleySetLength extends CommandBase {
+public class TopPulleySetLength extends CommandBase {
 
    double tapeLength;
     double error;
     double speed;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-   public LeftPulleySetLength(double T, double e,double s) {
-        requires(leftpulley);                                
+   public TopPulleySetLength(double T, double e,double s) {
+        requires(toppulley);                                
         tapeLength = T;
         error = e;
         speed=s;
     }
-    
     // Called just before this Command runs the first time
 
     protected void initialize() {
-        leftpulley.setTape(speed);
+        toppulley.setTape(speed);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -34,12 +33,12 @@ public class LeftPulleySetLength extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(leftpulley.getTapeLength() - tapeLength) < error);
+        return (Math.abs(toppulley.getTapeLength() - tapeLength) < error);
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        leftpulley.setTape(0);
+        toppulley.setTape(0);
     }
 
     // Called when another command which requires one or more of the same

@@ -9,7 +9,13 @@ import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.templates.commands.ClimbFirstRung;
 import edu.wpi.first.wpilibj.templates.commands.PrepareFirstRung;
-
+import edu.wpi.first.wpilibj.templates.commands.LeftPulleySetLength;
+import edu.wpi.first.wpilibj.templates.commands.LeftRodFollowTape;
+import edu.wpi.first.wpilibj.templates.commands.LeftRodAngleFree;
+import edu.wpi.first.wpilibj.templates.commands.SidePause;
+import edu.wpi.first.wpilibj.templates.commands.SideResume;
+import edu.wpi.first.wpilibj.templates.commands.TopPause;
+import edu.wpi.first.wpilibj.templates.commands.TopResume;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -42,8 +48,7 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     //
-    //  Following not used anymore. Needed a central place to get frameangle
-    //Gyro gyro = new Gyro(RobotMap.GYRO_CHAN);  
+ 
 
     //public double getFrameAngle() {
     //double frameangle = gyro.getAngle();
@@ -56,6 +61,10 @@ public class OI {
     protected Button pRungOne;
     //protected Button wAngle;
     protected Button climbRungOne;
+    protected Button sResume;
+    protected Button sPause;
+     protected Button tResume;
+    protected Button tPause;
     //protected Button wLength;
     // Left Buttons
    // protected Button lAngle;
@@ -69,19 +78,33 @@ public class OI {
     //protected Button rLock;
    // protected Button rULock;
    // protected Button rAdjust;
-
+     /**
+     * The state of a couple of key control commands
+     * These two variables allow operator control during autonomous climbing.
+     * They signal when the middle pulley can stop stalling. and allow the 
+     * command groups to pause at intervals to wait for the "REsume"
+     * 
+     **/
+   public static boolean middleFinish;
+   public static boolean resume;
+        
     public OI() {
         driveStick = new Joystick(RobotMap.DRIVESTICK);
         //leftStick = new Joystick(RobotMap.LeftStick);
         //rightStick = new Joystick(RobotMap.RightStick);
+        middleFinish = false;
+        resume=false;
         initButtons();
     }
-
     private void initButtons() {
-        // Wills buttons
+        // center joystick buttons
         //driveMode = new JoystickButton(driveStick, 1);
         pRungOne= new JoystickButton(driveStick, 4);
         climbRungOne= new JoystickButton(driveStick, 5);
+        sPause=new JoystickButton(driveStick, 6);
+        sResume=new JoystickButton(driveStick, 7);
+         tPause=new JoystickButton(driveStick, 2);
+        tResume=new JoystickButton(driveStick, 3);
         //wAngle = new JoystickButton(driveStick, 4);
         //wLength = new JoystickButton(driveStick, 5);
 
@@ -102,12 +125,15 @@ public class OI {
         //Assign the buttons to their commands
         tieButtons();
     }
-
     private void tieButtons() {
         //Wills buttons
         //driveMode.whenPressed(new DriveMode());
         pRungOne.whenPressed(new PrepareFirstRung());
         climbRungOne.whenPressed(new ClimbFirstRung());
+        sPause.whenPressed(new SidePause());
+         sResume.whenPressed(new SideResume());
+         tPause.whenPressed(new TopPause());
+         tResume.whenPressed(new TopResume());        
         //wAngle.whenPressed(new WillAngle());
         //wLength.whenPressed(new WillLength());
         //Right buttons
@@ -127,11 +153,9 @@ public class OI {
     public Joystick getDriveStick() {
         return driveStick;
     }
-
-    //public Joystick getLeftStick() {
+  //public Joystick getLeftStick() {
     //    return leftStick;
     //}
-
     //public Joystick getRightStick() {
     //    return rightStick;
    // }

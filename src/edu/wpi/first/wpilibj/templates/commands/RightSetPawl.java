@@ -3,43 +3,43 @@
  * and open the template in the editor.
  */
 package edu.wpi.first.wpilibj.templates.commands;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  * @author Brinton
  */
-public class LeftPulleySetLength extends CommandBase {
+public class RightSetPawl extends CommandBase {
 
-   double tapeLength;
-    double error;
-    double speed;
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-   public LeftPulleySetLength(double T, double e,double s) {
-        requires(leftpulley);                                
-        tapeLength = T;
-        error = e;
-        speed=s;
+    private boolean pawlPosition;
+
+    public RightSetPawl(boolean pawlposition) {
+        requires(rightpulley);
+        pawlPosition = pawlposition;
     }
-    
-    // Called just before this Command runs the first time
 
+    // Called just before this Command runs the first time
     protected void initialize() {
-        leftpulley.setTape(speed);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        
+        leftpulley.setLock(pawlPosition);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(leftpulley.getTapeLength() - tapeLength) < error);
+        boolean b;
+        b= rightpulley.pawlLocked;
+        SmartDashboard.putBoolean("RightPawl state requested=",pawlPosition ); 
+        SmartDashboard.putBoolean("RightPawl state achieved=",b ); 
+        return (pawlPosition=b);
+        
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        leftpulley.setTape(0);
     }
 
     // Called when another command which requires one or more of the same

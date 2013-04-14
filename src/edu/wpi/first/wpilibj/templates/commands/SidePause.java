@@ -3,16 +3,20 @@
  * and open the template in the editor.
  */
 package edu.wpi.first.wpilibj.templates.commands;
+
 /**
  *
  * @author laptop
  */
-public class LeftPulleyDoNothing extends CommandBase {
+public class SidePause extends CommandBase {
     
-    public LeftPulleyDoNothing() {
-        requires(leftpulley);
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public SidePause() {
+        requires (leftpulley);
+        requires (leftrod);
+        //requires (rightrod);
+        //requires (rightpulley);
+
+        
     }
 
     // Called just before this Command runs the first time
@@ -21,7 +25,6 @@ public class LeftPulleyDoNothing extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        leftpulley.stopPulley();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -31,12 +34,10 @@ public class LeftPulleyDoNothing extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
-        leftpulley.stopPulley();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() {
-        end();
+    protected void interrupted() {end();
     }
 }
