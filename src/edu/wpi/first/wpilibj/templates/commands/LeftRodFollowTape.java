@@ -3,25 +3,29 @@
  * and open the template in the editor.
  */
 package edu.wpi.first.wpilibj.templates.commands;
-
+import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.templates.SI;
 
 /**
  *
  * @author Brinton
  */
-public class LeftRodAngleFollowTape extends CommandBase {
+public class LeftRodFollowTape extends CommandBase {
 
     private boolean floor;
     private double tapegoal;
+    private double error;
+    private int pulley;
     SmartDashboard smartdashboard;
-
-    public LeftRodAngleFollowTape(boolean floor, double tapeGoal) {
+    public LeftRodFollowTape(boolean floor, double tapeGoal) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(leftrod);
         this.floor = floor;
         this.tapegoal = tapeGoal;
+        this.error=.3;
+       this.pulley=1;
     }
     // Called just before this Command runs the first time
 
@@ -31,18 +35,17 @@ public class LeftRodAngleFollowTape extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         double tapelength;
-        double rframeangle;
         double dtapeangle;
         tapelength = leftrod.getTapeLength();
         SmartDashboard.putNumber("leftFollowTape TapeLength left", tapelength);
-        rframeangle = leftrod.getFrameAngle();
-        SmartDashboard.putNumber("leftFollowTape Frame Angle ", rframeangle);
-        dtapeangle = leftrod.getClimbTapeAngle(floor, tapelength, rframeangle);
-       SmartDashboard.putNumber("leftFollowTape Climb Tape Angle", dtapeangle);
+        SmartDashboard.putNumber("leftFollowTape Frame Angle ",
+                    SI.getrFrameAngle());
+       dtapeangle = FrameMath.getClimbTapeAngle(floor, tapelength, pulley);
+       SmartDashboard.putNumber("leftFollowTape Climb Tape Angle", 
+               FrameMath.getClimbTapeAngle(floor, tapelength, pulley));
         SmartDashboard.putNumber("leftFollowTape Servo Value",
-        leftrod.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal));
+       FrameMath.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal,pulley));
         leftrod.adjustAngleClimbing(floor);
-
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -50,7 +53,7 @@ public class LeftRodAngleFollowTape extends CommandBase {
         // when is this finished? when tapelength within .5 icnes
         double t1;
         t1 = leftrod.getTapeLength();
-        return (Math.abs(t1 - this.tapegoal) < .5);
+        return (Math.abs(t1 - this.tapegoal) < error);
     }
 
     // Called once after isFinished returns true
