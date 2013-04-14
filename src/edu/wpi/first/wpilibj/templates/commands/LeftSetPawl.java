@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  * @author Brinton
@@ -28,7 +30,12 @@ public class LeftSetPawl extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        boolean b;
+        b= leftpulley.pawlLocked;
+        SmartDashboard.putBoolean("LeftPawl state requested=",pawlPosition ); 
+        SmartDashboard.putBoolean("LeftPawl state achieved=",b ); 
+        return (pawlPosition=b);
+        
     }
 
     // Called once after isFinished returns true
