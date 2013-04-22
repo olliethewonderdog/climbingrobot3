@@ -16,24 +16,25 @@ public class TopRodAngleFree extends CommandBase {
     private double goalTapeLength;
     private double error;
     private double dTapeAngToFloor;
-    private int pulley;
+       private int pulley;
     private double dTapeAngToFrame;
-    private double servoSpeed;
-    
+    private double servoSpeed; 
     public TopRodAngleFree(double dTAng, double T) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(toprod);
-        goalTapeLength = T;
+         goalTapeLength = T;
         // angle of the tape relative to the frame in degrees
         dTapeAngToFloor = dTAng;
         error=.5;
         pulley=0;
-        servoSpeed=.33;
+        servoSpeed=1;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+         SmartDashboard.putNumber("top RodAnglefree"
+                + " Frame Angle", SI.getdFrameAngle());
     }
 
     /**
@@ -47,18 +48,22 @@ public class TopRodAngleFree extends CommandBase {
      */
     protected void execute() {
         // 
-       
-        dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
+         SmartDashboard.putNumber("top RodAnglefree"
+                + " dTapeAngToFrame",dTapeAngToFrame);
+         
+            dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
 
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("top RodAnglefree"
                 + " Top Tape Length", toprod.getTapeLength());
         
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("top RodAnglefree"
                 + " Frame Angle", SI.getdFrameAngle());
         
-        SmartDashboard.putNumber("RodAnglefree Top Rod Servo",
+        SmartDashboard.putNumber("top RodAnglefree Rod Servo",
                 FrameMath.calcServoFromAngle(
-                true, Math.toRadians(dTapeAngToFrame),toprod.getTapeLength(),pulley));
+                true, Math.toRadians(dTapeAngToFrame),toprod.getTapeLength(),
+                pulley)
+                );
         
        toprod.setRodAngleFree(servoSpeed, dTapeAngToFrame);
     }
@@ -77,8 +82,12 @@ public class TopRodAngleFree extends CommandBase {
          else
          {  
          double servValfinal =
-         FrameMath.calcServoFromAngle(true, Math.toRadians(dTapeAngToFrame), goalTapeLength,pulley);
+         FrameMath.calcServoFromAngle(true, Math.toRadians(dTapeAngToFrame),
+                 goalTapeLength,pulley);
+         
          boolean servDone=toprod.isServoFinished(servValfinal);
+         SmartDashboard.putBoolean("top RodAnglefree"
+                + " servDone", servDone);
          return servDone;
          }
     }

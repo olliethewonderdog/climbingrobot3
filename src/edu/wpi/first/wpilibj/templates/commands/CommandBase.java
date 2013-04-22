@@ -1,5 +1,6 @@
 package edu.wpi.first.wpilibj.templates.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.OI;
@@ -37,16 +38,21 @@ public abstract class CommandBase extends Command {
         // which commands extend), subsystems are not guaranteed to be
         // yet. Thus, their requires() statements may grab null pointers. Bad
         // news. Don't move it.
+         si= new SI();
         oi = new OI();
-        si= new SI();
+   
+        
+        
         math=new FrameMath();
         // Show what command your subsystem is running on the SmartDashboard
         SmartDashboard.putData(leftpulley);
+        
         SmartDashboard.putData(leftrod);
         SmartDashboard.putData(rightrod);
         SmartDashboard.putData(rightpulley);
         SmartDashboard.putData(toprod);
         SmartDashboard.putData(toppulley);
+        
         
     }
     public CommandBase(String name) {

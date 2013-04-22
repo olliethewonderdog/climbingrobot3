@@ -22,6 +22,7 @@ public class RightRod extends Rod {
         servo = new Servo(RobotMap.P_RIGHT_SERVO_CAR,
                 RobotMap.P_RIGHT_SERVO_CHAN);
         pulleyNumber=2;
+        servo.setBounds(244,0,0,0,11);
     }
     public double getTapeLength() {
         double v =SI.getRight();

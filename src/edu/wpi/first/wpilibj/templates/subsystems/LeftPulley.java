@@ -24,9 +24,8 @@ public class LeftPulley extends Pulley {
       /**
       * Length of hook is added to tape true for all hooks
       */
-        hooklen = 4.5;
       // Maximum, minimum,and starting  tapelengths are particular to each pulley
-       tapeLenMax = 42;
+       tapeLenMax = 38;
        tapeLenMin = 5.0;
        initialTapeLen = 20;
        /**

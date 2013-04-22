@@ -5,7 +5,6 @@
 package edu.wpi.first.wpilibj.templates.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.templates.SI;
 import edu.wpi.first.wpilibj.command.WaitForChildren;
 
 /**
@@ -13,10 +12,7 @@ import edu.wpi.first.wpilibj.command.WaitForChildren;
  * @author Brinton
  */
 public class ClimbFirstRung extends CommandGroup {
-
-  SI si;
   
-private double dframeAngle;
 
     public ClimbFirstRung() {
         addSequential(new LeftSetPawl(true));

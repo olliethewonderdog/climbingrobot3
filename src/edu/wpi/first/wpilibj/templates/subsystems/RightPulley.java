@@ -15,9 +15,9 @@ public class RightPulley extends Pulley {
     
     public RightPulley() {
        super("rightpulley",Kp,Ki,Kd);
-       name="left";
+       name="right";
       // Maximum, minimum,and starting  tapelengths are particular to each pulley
-       tapeLenMax = 42;
+       tapeLenMax = 38;
        tapeLenMin = 5.0;
        initialTapeLen = 20;
        /**
@@ -41,6 +41,7 @@ public class RightPulley extends Pulley {
       */
      public double getTapeLength() {
         double v =SI.getRight();
+        
         double length= FrameMath.potParam [pulleyNumber][0]*v+ FrameMath.potParam [pulleyNumber][1]
                 +hooklen;
         return length; 

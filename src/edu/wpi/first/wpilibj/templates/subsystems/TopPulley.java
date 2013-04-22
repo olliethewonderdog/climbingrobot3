@@ -23,7 +23,7 @@ public class TopPulley extends Pulley {
       /**
       * Length of hook is added to tape true for all hooks
       */
-        hooklen = 4.5;
+        hooklen = 0;
       // Maximum, minimum,and starting  tapelengths are particular to each pulley
        tapeLenMax = 47;
        tapeLenMin = 5.0;

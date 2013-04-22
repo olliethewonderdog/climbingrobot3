@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.templates.SI;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.OI;
 /**
@@ -22,14 +23,14 @@ public abstract class Pulley extends PIDSubsystem {
      */
     protected double hooklen;
     // Maximum, minimum,and starting  tapelengths are particular to each pulley
-    protected double tapeLenMax;
-    protected  double tapeLenMin ;
+    public double tapeLenMax;
+    public  double tapeLenMin ;
     protected double initialTapeLen ;
     protected int pulleyNumber;
     /**
      * Motor direction is +1 or -1 depending on its orientation in the robot
      */
-    protected int direct ;
+    public int direct ;
     // The PWM values for the open and locked postions of the pawl
     protected double pawlLock  ;
     protected double pawlOpen ;
@@ -50,7 +51,7 @@ public abstract class Pulley extends PIDSubsystem {
      */
     public Pulley(String name, double p, double i, double d) {
         super(name, p, i, d);  
-        hooklen=4.5;
+        hooklen=0 ;
         pulleyErrorMax=1;
         pulleyErrorMin=.1 ;
         pulleyErrorDef=.15;
@@ -63,10 +64,11 @@ public abstract class Pulley extends PIDSubsystem {
         //enable(); // - Enables the PID controller.
     /**
      * Gets tape length in inches as a function of voltage
-     * abstract because it reads a particular potntiometer
+     * abstract because it reads a particular potentiometer
      * @return tape length in inches
      */
-    public abstract double getTapeLength() ;
+      public abstract double getTapeLength() ;
+    
       public void setTape(double velocity) {
         // speed is positive to extend, negative to retract
         // if there is an attempt to extend a locked pulley, Don't do it. 
@@ -181,37 +183,45 @@ public abstract class Pulley extends PIDSubsystem {
          */
         else
         {
-         double minimumTapeExtension=.5;
-         int tapeRetractIterations=7;
-         double retractionVelocity=-.15;
-         double waitTimePerIteration=.05;
-         double extensionVelocity=.15;
-         double waitTimePerAttemptedRetraction=1;
+         double minimumTapeExtension=.4;
+         int tapeRetractIterations=5;
+         double retractionVelocity=-.2;
+         double waitTimePerIteration=.07;
+         double extensionVelocity=.4;
+         double waitTimePerAttemptedRetraction=.2;
          //
          pawl.set(pawlOpen);
-           double startlength=this.getTapeLength();
+           double startLength=this.getTapeLength();
+           int count=1;
            // Do this loop until the tape has extended .5 inches
            // currently stays in this loop until 
-           while (this.getTapeLength()-minimumTapeExtension < startlength)
+           while (this.getTapeLength()-minimumTapeExtension < startLength)
            {
-            for(int i=1; i<tapeRetractIterations; i++)
-            {
-                this.setTape(retractionVelocity);
+            for(int i=1; i < tapeRetractIterations; i++)
+            {this.setTape(retractionVelocity);
               Timer.delay(waitTimePerIteration);
               this.setTape(0);
              }
-            startlength=this.getTapeLength();
+            startLength=this.getTapeLength();
+            SmartDashboard.putNumber("pulley.setLock startLength"
+                , startLength);
             // Try to extend the tape
             this.setTape(extensionVelocity);
             //should move more than half an inch in 1 second
             Timer.delay(waitTimePerAttemptedRetraction);
             this.setTape(0);
+            Timer.delay(.3);
+            SmartDashboard.putNumber("pulley.setLock TapeLength"
+             ,this.getTapeLength());
+             SmartDashboard.putNumber("count" ,count);
            } 
             pawlLocked = false;
         }
-        // Publish the state      
+        // Publish the state  
+        SmartDashboard.putBoolean("PawlsetLock returning" ,false);
         return false;
     }
+    
     public void initDefaultCommand() {
        
     }

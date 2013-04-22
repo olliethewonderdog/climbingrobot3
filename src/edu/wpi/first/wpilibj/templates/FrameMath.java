@@ -95,7 +95,7 @@ public final class FrameMath {
             int pulley) {
         double dFrAng =SI.getdFrameAngle();
         double rFrAng =SI.getrFrameAngle();
-        double rTapeAngHoriz;
+        double rTapeAngFloor;
         double dTapeAngle;
         double [] pulleyHeight;
         double [] [] servRodPosition;
@@ -135,7 +135,7 @@ public final class FrameMath {
             else 
                 if (dFrAng < 91 && dFrAng > 89) //Are we near 90 degrees
                 {
-                rTapeAngHoriz = MathUtils.acos((RNGHORIZDIST + heightPull));
+                rTapeAngFloor = MathUtils.acos((RNGHORIZDIST + heightPull));
                 } 
                 else 
                     if (dFrAng < 1 && dFrAng > -1) //Are re we near 0 degrees?
@@ -143,11 +143,11 @@ public final class FrameMath {
                         if (T <= Math.sqrt(MathUtils.pow(RNGVERDIST - heightPull, 2)
                              + MathUtils.pow(RNGHORIZDIST + heightPull, 2)))
                         {
-                           rTapeAngHoriz = MathUtils.asin((RNGVERDIST - heightPull) / T);
+                           rTapeAngFloor = MathUtils.asin((RNGVERDIST - heightPull) / T);
                         }
                         else 
                         
-                        rTapeAngHoriz = MathUtils.acos((RNGHORIZDIST + heightPull) / T);
+                        rTapeAngFloor = MathUtils.acos((RNGHORIZDIST + heightPull) / T);
                         
                     } 
                     else
@@ -161,16 +161,22 @@ public final class FrameMath {
                         + MathUtils.pow(RNGHORIZDIST, 2)
                         + MathUtils.pow(k4, 2) + 2 * (RNGHORIZDIST * k4) 
                         - MathUtils.pow(T, 2);
-                     SmartDashboard.putNumber("Quad a", a);
-                     SmartDashboard.putNumber("Quad b", b);
-                     SmartDashboard.putNumber("Quad c", c);
+                     SmartDashboard.putNumber("getClimbTapeAng getClimbTapeAng "+String.valueOf(pulley)+"Quad k4", k4);
+                     SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad k5", k5);
+                    
+                     SmartDashboard.putNumber(" "+String.valueOf(pulley)+"Quad a", a);
+                     SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad b", b);
+                     SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad c", c);
                      double x2 = (-b - Math.sqrt(((b * b) - (4 * a * c)))) / (2 * a);
-
-                      rTapeAngHoriz = MathUtils.atan((RNGVERDIST-x2)
+                     SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad x2", x2);
+                      rTapeAngFloor = MathUtils.atan((RNGVERDIST-x2)
                               / (RNGHORIZDIST + k4 - k5 * x2));
                       }
-           dTapeAngle = Math.toDegrees(rTapeAngHoriz) - dFrAng;
-           SmartDashboard.putNumber("dTapeAngle", dTapeAngle);
+            SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+"dTapeAngFloor",
+                               Math.toDegrees(rTapeAngFloor));
+           dTapeAngle = Math.toDegrees(rTapeAngFloor) - dFrAng;
+           SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+ 
+                   "dTapeAngle to Frame", dTapeAngle);
            return dTapeAngle;
         }
     }
@@ -220,13 +226,19 @@ public final class FrameMath {
        //  inititialize angTapHoriz
         double rTapeAngToFloor = 0;
         double rFramAng=SI.getrFrameAngle();
+        double dFramAng=SI.getdFrameAngle();
+        SmartDashboard.putNumber("calcServoFromAngle dFrameAngle "+String.valueOf(pulley),
+               dFramAng);
+        //if (dFramAng>10 || dFramAng<-10)rFramAng=0;
+       // double dFramAng=SI.getdFrameAngle();
         if (droop) {
             rTapeAngToFloor = rTapeAngToFrame + rFramAng;
         }
-        SmartDashboard.putNumber("rangTapHoriz"+String.valueOf(pulley),
-                rTapeAngToFloor);
-        SmartDashboard.putNumber("rTaAng"+String.valueOf(pulley),rTapeAngToFrame);
-        SmartDashboard.putBoolean("droop"+String.valueOf(pulley),droop);
+       // SmartDashboard.putNumber("calcServoFromAngle dTapeAngToFloor "+String.valueOf(pulley),
+        //        Math.toDegrees(rTapeAngToFloor));
+       // SmartDashboard.putNumber("calcServoFromAngle dTapeAngToFrame "
+       //         +String.valueOf(pulley),Math.toDegrees(rTapeAngToFrame));
+       // SmartDashboard.putBoolean("calcServoFromAngle droop "+String.valueOf(pulley),droop);
         /**
          * @param droopAdjFact will be between 0 and 1. It is normalized
          * relative to an expected deflection of
@@ -236,7 +248,7 @@ public final class FrameMath {
          */
         double droopAdjFact = (T * T * T * Math.cos(rTapeAngToFloor)
                 * Math.cos(rTapeAngToFloor)) / (45 * 45 * 45);
-        SmartDashboard.putNumber("droopAdjFactor", droopAdjFact);
+      //  SmartDashboard.putNumber("droopAdjFactor", droopAdjFact);
         //
         //Add the adjustment to the target angle
         //
@@ -262,23 +274,30 @@ public final class FrameMath {
         };  
          //
         double servHeightPullBott=servRodPosition [pulley][0];
+        
+       // SmartDashboard.putNumber("CalcServo servHeightPullBott "+String.valueOf(pulley)
+          //      + "height", servHeightPullBott);
         double servDistBehindPull=servRodPosition [pulley][1];
+        
+        //SmartDashboard.putNumber("CalcServo servDistBehind "+String.valueOf(pulley)
+         //       + "behind dist", servDistBehindPull);
         /* 
          * now the trig equations
-         */
+         */ 
         double j2 = Math.sin(rTapeAngToFrame) * T - servHeightPullBott;
-        SmartDashboard.putNumber("rod axis "+String.valueOf(pulley)
-                + "vert dist", j2);
+        SmartDashboard.putNumber("CalcServo rodhookend "+String.valueOf(pulley)
+                + " vert dist j2 ", j2);
         double j3 = Math.cos(rTapeAngToFrame) * T + servDistBehindPull;
-        SmartDashboard.putNumber("rod axis "+String.valueOf(pulley)
-                + "horz dist j3", j3);
+        SmartDashboard.putNumber("CalcServo rodhookend "+String.valueOf(pulley)
+                + " horz dist j3 ", j3);
         /**
          * rodAxisLeng is distance between rod ends, for a given tape length and
          * tape angle to the frame, based on relative position of pulley bottom
          * and servo
          */
         double rodAxisLeng = Math.sqrt((j2 * j2) + (j3 * j3));
-        SmartDashboard.putNumber("distance betw rod ends"+String.valueOf(pulley),
+        SmartDashboard.putNumber("Calc Servo distance betw rod ends j4 "+
+                String.valueOf(pulley),
                 rodAxisLeng);
         //
         /**
@@ -300,18 +319,18 @@ public final class FrameMath {
                 //only left one is correct
                 //mid
                // left
-               //right
+               //right is now correct
         {
-          {-3.28,190,.0032,.276},
-          {-3.28,190,.0032,.276},
-          {-3.28,190,.0032,.276}
+          {-1.96,172,-.00325,.803},
+          {-2.61,+171,.00325,.276},
+          {-2.61,171,-.00793,1.427}
         };
         double mServAngRodAxis  = servRodParam [pulley][0];
         double kServAngRodAxis = servRodParam [pulley][1]; 
         //
-        double dServAngRodAxis = mServAngRodAxis - kServAngRodAxis * rodAxisLeng;
+        double dServAngRodAxis = mServAngRodAxis*rodAxisLeng + kServAngRodAxis; 
        
-        SmartDashboard.putNumber("Angle of servo"+String.valueOf(pulley)+ 
+        SmartDashboard.putNumber("CalcServo Angle of servo j5"+String.valueOf(pulley)+ 
                 " to rod axis deg", dServAngRodAxis);
         /**
          * j6 is the angle the rod axis makes to the tape.
@@ -322,18 +341,19 @@ public final class FrameMath {
         } else {
             j6 = 0;
         }
-        SmartDashboard.putNumber("Angle of rod"+String.valueOf(pulley)+ 
-                " axis to tape deg", j6);
+        SmartDashboard.putNumber("CalcServo Angle of rod "+String.valueOf(pulley)+ 
+                " axis to frame deg", j6);
         /**
          * j7 is the angle that the rod end at the servo makes to the frame. It
          * therefore the servo angle to the frame.
          */
         double j7 = dServAngRodAxis + j6;
-        SmartDashboard.putNumber("Angle of servo"+String.valueOf(pulley)+ "to tape deg", j7);
+        SmartDashboard.putNumber("Calc Servo Angle of servo "+
+                String.valueOf(pulley)+ "to frame deg", j7);
         /**
         * The empirically derived linear relationship between servo input value
         * and servo angle relative to the frame
-        * The slope and intercept of this equation is stored in the 3d and 4th
+        * The slope and intercept of this equation are stored in the 3d and 4th
         * columns of the servRodParam array above
         *
         */
@@ -342,7 +362,8 @@ public final class FrameMath {
         //
         double sVal = kServAngToServVal
                 + mServAngToServVal * j7;
-        SmartDashboard.putNumber("Servo"+String.valueOf(pulley)+ " value", sVal);
+        SmartDashboard.putNumber("CalcServo ServoVal"+String.valueOf(pulley)+
+                " value", sVal);
         return sVal;
     }
 }

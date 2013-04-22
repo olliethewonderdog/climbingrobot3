@@ -23,16 +23,18 @@ public class LeftRodAngleFree extends CommandBase {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(leftrod);
-        goalTapeLength = T;
+         goalTapeLength = T;
         // angle of the tape relative to the frame in degrees
         dTapeAngToFloor = dTAng;
         error=.5;
         pulley=1;
-        servoSpeed=.33;
+        servoSpeed=1;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+         SmartDashboard.putNumber("left RodAnglefree"
+                + " Frame Angle", SI.getdFrameAngle());
     }
 
     /**
@@ -46,18 +48,22 @@ public class LeftRodAngleFree extends CommandBase {
      */
     protected void execute() {
         // 
-       
+         SmartDashboard.putNumber("left RodAnglefree"
+                + " dTapeAngToFrame",dTapeAngToFrame);
+         
             dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
 
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("left RodAnglefree"
                 + " Left Tape Length", leftrod.getTapeLength());
         
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("left RodAnglefree"
                 + " Frame Angle", SI.getdFrameAngle());
         
-        SmartDashboard.putNumber("RodAnglefree Left Rod Servo",
+        SmartDashboard.putNumber("left RodAnglefree Rod Servo",
                 FrameMath.calcServoFromAngle(
-                true, Math.toRadians(dTapeAngToFrame),leftrod.getTapeLength(),pulley));
+                true, Math.toRadians(dTapeAngToFrame),leftrod.getTapeLength(),
+                pulley)
+                );
         
        leftrod.setRodAngleFree(servoSpeed, dTapeAngToFrame);
     }
@@ -78,7 +84,10 @@ public class LeftRodAngleFree extends CommandBase {
          double servValfinal =
          FrameMath.calcServoFromAngle(true, Math.toRadians(dTapeAngToFrame),
                  goalTapeLength,pulley);
+         
          boolean servDone=leftrod.isServoFinished(servValfinal);
+         SmartDashboard.putBoolean("left RodAnglefree"
+                + " servDone", servDone);
          return servDone;
          }
     }

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.templates.SI;
 public class RightRodAngleFree extends CommandBase {
     private double goalTapeLength;
     private double error;
-   private double dTapeAngToFloor;
+    private double dTapeAngToFloor;
     private int pulley;
     private double dTapeAngToFrame;
     private double servoSpeed;
@@ -29,8 +29,8 @@ public class RightRodAngleFree extends CommandBase {
         // angle of the tape relative to the frame in degrees
         dTapeAngToFloor = dTAng;
         error=.5;
-        pulley=0;
-        servoSpeed=.33;
+        pulley=2;
+        servoSpeed=1;
     }
 
     // Called just before this Command runs the first time
@@ -48,16 +48,18 @@ public class RightRodAngleFree extends CommandBase {
      */
     protected void execute() {
         // 
-       
+         SmartDashboard.putNumber("right RodAnglefree"
+                + " dTapeAngToFrame",dTapeAngToFrame);
+         
             dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
 
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("right RodAnglefree"
                 + " Right Tape Length", rightrod.getTapeLength());
         
-        SmartDashboard.putNumber("RodAnglefree"
+        SmartDashboard.putNumber("right RodAnglefree"
                 + " Frame Angle", SI.getdFrameAngle());
         
-        SmartDashboard.putNumber("RodAnglefree Right Rod Servo",
+        SmartDashboard.putNumber("right RodAnglefree Rod Servo",
                 FrameMath.calcServoFromAngle(
                 true, Math.toRadians(dTapeAngToFrame),rightrod.getTapeLength(),
                 pulley)
@@ -82,7 +84,11 @@ public class RightRodAngleFree extends CommandBase {
          double servValfinal =
          FrameMath.calcServoFromAngle(true, Math.toRadians(dTapeAngToFrame),
                  goalTapeLength,pulley);
-         boolean servDone=rightrod.isServoFinished(servValfinal);
+        SmartDashboard.putNumber("right RodAnglefree"
+                + " servValfinal", servValfinal);
+        boolean servDone=rightrod.isServoFinished(servValfinal);
+         SmartDashboard.putBoolean("right RodAnglefree"
+                + " servDone", servDone);
          return servDone;
          }
     }

@@ -43,8 +43,8 @@ public class RobotMap {
     public static final int P_RIGHT_SERVO_CAR = 1;
     public static final int P_RIGHT_LOCK_CHAN = 4;
     public static final int P_RIGHT_LOCK_CAR = 1;
-    public static final double P_RIGHT_LOCK_LOCKED = .5;            //PAWL
-    public static final double P_RIGHT_LOCK_OPEN = .8;
+    public static final double P_RIGHT_LOCK_LOCKED = .385;            //PAWL
+    public static final double P_RIGHT_LOCK_OPEN = .725;
     public static final double P_RIGHT_HOME = .63;
     public static final double P_RIGHT_MAX = 1;
     public static final double P_RIGHT_MIN = .63;
@@ -57,8 +57,8 @@ public class RobotMap {
     public static final int P_LEFT_SERVO_CAR = 2;
     public static final int P_LEFT_LOCK_CHAN = 5;
     public static final int P_LEFT_LOCK_CAR = 2;
-    public static final double P_LEFT_LOCK_LOCKED = .13;
-    public static final double P_LEFT_LOCK_OPEN = .5;
+    public static final double P_LEFT_LOCK_LOCKED = .66;
+    public static final double P_LEFT_LOCK_OPEN = .405;
     public static final double P_LEFT_HOME = .62;
     public static final double P_LEFT_MAX = .62;
     public static final double P_LEFT_MIN = .2;

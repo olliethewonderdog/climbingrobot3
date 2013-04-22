@@ -10,11 +10,10 @@ import edu.wpi.first.wpilibj.command.WaitForChildren;
  * @author Brinton
  */
 public class ClimbNextRung extends CommandGroup {
-
     public ClimbNextRung() {
         //1.Extend top pulley to 45 inches while maintaining rod angle of 80 
         // degreesto horizon. Then pause
-         addParallel(new TopPulleySetLength(45,.1,.5));
+         addParallel(new TopPulleySetLength(45,.1,1));
          addParallel(new TopRodAngleFree(80,45));
          addSequential (new WaitForChildren());
          addSequential (new TopPause());
@@ -50,11 +49,11 @@ public class ClimbNextRung extends CommandGroup {
         // at an angle that will allow them to hook the rung.
         //  Hold position with the center tape while they do this.
         //  
-        addSequential(new ExtendSidePulleys(36.,36.,80.,80.,.7,.7,.5,.5));
+        addSequential(new ExtendSidePulleys(36.,36.,80.,80.,.9,.9,.5,.5));
         //
         // 6. Now lower the side rods to hook the rung. 
         //
-        addSequential(new ExtendSidePulleys(36.,36.,60.,60.,.7,.7,.5,.5));
+        addSequential(new ExtendSidePulleys(36.,36.,60.,60.,.9,.9,.5,.5));
         // 7..Pause sides
         //
         addSequential (new SidePause());

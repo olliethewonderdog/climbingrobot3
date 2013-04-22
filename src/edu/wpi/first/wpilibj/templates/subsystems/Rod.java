@@ -32,21 +32,23 @@ public abstract class Rod extends Subsystem {
      */
     protected double maxServoVelocity;
     protected double servoError;
-    protected double servoErrorMulitplier;
+    protected double servoErrorMultiplier;
     int pulleyNumber;
     Servo servo;
     SmartDashboard smartdashboard;
-
-    // Initialize your subsystem here
+    private int count;
+    private int setCount;
     /**
      * this is a constructor
+     * Initialzes
      */
     public Rod(String name) { 
         super(name);
-        servo.setBounds(244,0,0,0,11);
-        maxServoVelocity = .0037;
+        maxServoVelocity = .006 ;
         servoError = .005;
-        servoErrorMulitplier=1.2;
+        servoErrorMultiplier=1.2;
+        count=0;
+        setCount=0;
     }
     /**
      *
@@ -62,6 +64,7 @@ public abstract class Rod extends Subsystem {
                 pulleyNumber);
         // Sets the servo by position given the current tape length
         this.setRodServoValue(dServVal);
+        
     }
     /**
      *
@@ -73,7 +76,7 @@ public abstract class Rod extends Subsystem {
         //need current frameangle and tapelength for next calculations
         double currTapeLen =this.getTapeLength();
         // calculates servo value to achieve target angle at current tape length
-        double dServVal = FrameMath.calcServoFromAngle(true, dTaAn,
+        double dServVal = FrameMath.calcServoFromAngle(true, Math.toRadians(dTaAn),
                 currTapeLen,pulleyNumber);
         // makes a small incremental change to servo value chasing goal angle
         setRodServoVelocity(serVeloc, dServVal, servoError);
@@ -86,7 +89,11 @@ public abstract class Rod extends Subsystem {
      * about 1.5 degrees
      */
     public boolean isServoFinished(double target) {
-        return (Math.abs(servo.get() - target) < servoErrorMulitplier * servoError);
+        SmartDashboard.putNumber("Rod isServofinished" 
+                +"Math.abs(servo.get() - target)", Math.abs(servo.get() - target));
+        SmartDashboard.putNumber("Rod isServofinished" 
+                +"Math.abs(servo.get() - target)", Math.abs(servo.get() - target));
+        return (Math.abs(servo.get() - target) < Math.abs(servoErrorMultiplier * servoError));
     }
 
     // To DO add other rods
@@ -108,11 +115,22 @@ public abstract class Rod extends Subsystem {
      * @param val
      */
     public void setRodServoValue(double val) {
-        servo.set(val);
+       // setCount =setCount+1;
+       // SmartDashboard.putNumber("setRodServValue"
+           //     +"setCount", setCount);
+        SmartDashboard.putNumber("setRodServValue "
+                +"val", val);
+       // if (setCount==3){
+            servo.set(val);
+          //  setCount=0;
+      //  }
+        double checkval =servo.get();
+        SmartDashboard.putNumber("setRodServValue  "
+                +"checkval", checkval);
     }
 
     /**
-     * This resets servo value in small increments which effectively slow it
+     * This resets servo value in small increments which effectively slows it
      * down. It deals with two problems in setting the servos that control the
      * rod angle. 1.Fast jerky servo movements- it slows the servo down 2.The
      * servo goes to its target position immediately and would therefore pass
@@ -131,61 +149,84 @@ public abstract class Rod extends Subsystem {
      * degrees as servo input goes from 0 to 1 which translates into about
      * 0.0037 servo units per period. This is a maximum velocity of 50 degrees
      * per second, way too fast. Propose slowing it down by a factor of 4, so
-     * the incremental adjustment is about .0009. A reasonable error value is
-     * 1.5 degree say about 0.005 PID is possible, if the setpoint is not
+     * the incremental adjustment is about .0009. A reasonable tolerance value is
+     * 1.5 degree say about 0.005 PWM is possible, if the setpoint is not
      * dynamic, but unnecessary, I think
      *
      * @param serVel
      * @param goalVal
-     * @param error
+     * @param tolerance
      * @return new value for the rod servo that is a small increment to its
      * previous value
      */
-    public void setRodServoVelocity(double serVel, double goalVal, double error) {
+    public void setRodServoVelocity(double serVel, double goalVal, double tolerance){
         double curVal = servo.get();
+        count = count +1 ;
+        SmartDashboard.putNumber("setRodServoVelocity"
+                +"curVal", curVal);
+        SmartDashboard.putNumber("setRodServoVelocity"
+                +"count", count);
+         SmartDashboard.putNumber("setRodServoVelocity"
+                +"serVel", serVel);
+         SmartDashboard.putNumber("setRodServoVelocity"
+                +"goalVal", goalVal);
+         SmartDashboard.putNumber("setRodServoVelocity"
+                +"tolerance", tolerance);
+         
+         // Check servo  velocity out of bounds
          if (serVel > 1) 
          {
             serVel = 1.;
          }
-         if (serVel < 0.0) 
+         if (serVel < 0.1) 
          {
-            serVel = 0.0;
+            serVel = 0.1;
          }
          double increVal = serVel * maxServoVelocity;
+         SmartDashboard.putNumber("setRodServoVelocity"
+                +"maxServoVelocity", maxServoVelocity);
+        
         // if we are geeting so close to the target value that the increment
-        // exceeds the error, cut the increment in half.
-         if (increVal > error) 
+        // exceeds the tolerance, cut the increment in half.
+         while (increVal > Math.abs(goalVal-curVal)) 
          {
-            increVal = .5 * error;
+            increVal = .5 * Math.abs(goalVal-curVal);
          }
-      
-         if (Math.abs(curVal - goalVal) < error) 
+             SmartDashboard.putNumber("setRodServoVelocity"
+                +"increVal", increVal);
+             SmartDashboard.putNumber("setRodServoVelocity"
+                +" curVal + increVal", curVal + increVal);
+             SmartDashboard.putNumber("setRodServoVelocity"
+                +"(Math.abs(goalVal - (curVal + increVal)", 
+                Math.abs(goalVal - (curVal + increVal)));
+             
+         if (Math.abs(curVal - goalVal) < tolerance) 
          {
-            servo.set(goalVal);
+           setRodServoValue(goalVal);
             return;
          }  
          if ((goalVal > curVal)
-                & ((Math.abs(goalVal - (curVal + increVal))) > error)) 
+                & ((Math.abs(goalVal - (curVal + increVal))) > tolerance)) 
          {
-            servo.set(curVal + increVal);
+             
+            setRodServoValue(curVal + increVal);
             return;
          }  
-         if (Math.abs(goalVal - (curVal + increVal)) <= error) 
+         if (Math.abs(goalVal - (curVal + increVal)) <= tolerance) 
          {
-           servo.set(goalVal);
+           setRodServoValue(goalVal);
            return;
          }  
-         if ((goalVal < curVal) & (Math.abs(goalVal - (curVal - increVal)) > error))
+         if ((goalVal < curVal) & (Math.abs(goalVal - (curVal - increVal)) > tolerance))
          {
-            servo.set(curVal - increVal);
+            setRodServoValue(curVal - increVal);
             return;
          }
-         if (Math.abs(goalVal - (curVal - increVal)) <= error)
+         if (Math.abs(goalVal - (curVal - increVal)) <= tolerance)
          {
-            servo.set(goalVal);
+            setRodServoValue(goalVal);
          }
     } 
- 
     // set default joystick
     public void initDefaultCommand() {
     }

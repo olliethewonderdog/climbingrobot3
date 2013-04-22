@@ -17,6 +17,7 @@ public class TopRod extends Rod {
         servo = new Servo(RobotMap.P_TOP_SERVO_CAR,
                 RobotMap.P_TOP_SERVO_CHAN); 
         pulleyNumber=0;
+        servo.setBounds(244,0,0,0,11);
     }
     /**
      * Gets potentiometer voltage from SI and applies the calibrated parameters.
