@@ -10,18 +10,16 @@ import  edu.wpi.first.wpilibj.templates.OI;
  *
  * @author laptop
  */
-public class TopPulleyCreepTape extends CommandBase {
+public class TopPulleyCreep extends CommandBase {
      double speed;
      double time;
    
     
-    public TopPulleyCreepTape(double s, double t) {
+    public TopPulleyCreep(double s) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(toppulley);
-        requires(toprod);
-        speed=s;
-        time=t;  
+        speed=s; 
     }
 
     // Called just before this Command runs the first time
@@ -35,7 +33,7 @@ public class TopPulleyCreepTape extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return OI.middleFinish ;
+        return false ;
     }
 
     // Called once after isFinished returns true

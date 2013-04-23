@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  * @author laptop
  */
-public class ClimbWithSidePulleys extends CommandGroup {
+public class SidePulleysClimb extends CommandGroup {
     
-    public ClimbWithSidePulleys(boolean floor,double leftLength,double rightLength,
-          double leftSpeed,double rightSpeed, double leftError,
-          double rightError) {
+    public SidePulleysClimb(boolean floor,float leftLength,float rightLength,
+          float leftSpeed,float rightSpeed, float leftError,
+          float rightError) {
         addParallel(new LeftPulleySetLength(leftLength, leftError,leftSpeed));
         addParallel(new LeftRodFollowTape(floor, leftLength));
         addParallel(new RightPulleySetLength(rightLength,rightError,rightSpeed));

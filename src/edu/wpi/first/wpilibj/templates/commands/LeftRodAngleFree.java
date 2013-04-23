@@ -13,20 +13,20 @@ import edu.wpi.first.wpilibj.templates.SI;
  *
  */
 public class LeftRodAngleFree extends CommandBase {
-    private double goalTapeLength;
-    private double error;
-    private double dTapeAngToFloor;
+    private float goalTapeLength;
+    private float error;
+    private float dTapeAngToFloor;
     private int pulley;
-    private double dTapeAngToFrame;
-    private double servoSpeed; 
-    public LeftRodAngleFree(double dTAng, double T) {
+    private float dTapeAngToFrame;
+    private float servoSpeed; 
+    public LeftRodAngleFree(float dTAng, float T) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(leftrod);
          goalTapeLength = T;
         // angle of the tape relative to the frame in degrees
         dTapeAngToFloor = dTAng;
-        error=.5;
+        error=.5f;
         pulley=1;
         servoSpeed=1;
     }
@@ -51,7 +51,7 @@ public class LeftRodAngleFree extends CommandBase {
          SmartDashboard.putNumber("left RodAnglefree"
                 + " dTapeAngToFrame",dTapeAngToFrame);
          
-            dTapeAngToFrame=-SI.getdFrameAngle()+dTapeAngToFloor;
+            dTapeAngToFrame=-(float)SI.getdFrameAngle()+dTapeAngToFloor;
 
         SmartDashboard.putNumber("left RodAnglefree"
                 + " Left Tape Length", leftrod.getTapeLength());
@@ -61,7 +61,7 @@ public class LeftRodAngleFree extends CommandBase {
         
         SmartDashboard.putNumber("left RodAnglefree Rod Servo",
                 FrameMath.calcServoFromAngle(
-                true, Math.toRadians(dTapeAngToFrame),leftrod.getTapeLength(),
+                true, (float)Math.toRadians(dTapeAngToFrame),(float)leftrod.getTapeLength(),
                 pulley)
                 );
         
@@ -73,7 +73,7 @@ public class LeftRodAngleFree extends CommandBase {
     // servo has reached goal
     protected boolean isFinished() {
         //calulates final servo position for 
-        double t;
+        float t;
         t = leftrod.getTapeLength();
         if (Math.abs(t - goalTapeLength) > error)
         {
@@ -81,9 +81,9 @@ public class LeftRodAngleFree extends CommandBase {
         }
          else
          {  
-         double servValfinal =
-         FrameMath.calcServoFromAngle(true, Math.toRadians(dTapeAngToFrame),
-                 goalTapeLength,pulley);
+         float servValfinal =
+         FrameMath.calcServoFromAngle(true, (float)Math.toRadians(dTapeAngToFrame),
+                 (float)goalTapeLength,pulley);
          
          boolean servDone=leftrod.isServoFinished(servValfinal);
          SmartDashboard.putBoolean("left RodAnglefree"

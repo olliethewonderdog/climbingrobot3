@@ -40,9 +40,6 @@ public abstract class CommandBase extends Command {
         // news. Don't move it.
          si= new SI();
         oi = new OI();
-   
-        
-        
         math=new FrameMath();
         // Show what command your subsystem is running on the SmartDashboard
         SmartDashboard.putData(leftpulley);
@@ -52,6 +49,18 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData(rightpulley);
         SmartDashboard.putData(toprod);
         SmartDashboard.putData(toppulley);
+        SmartDashboard.putData("PrepareFirstRung",new PrepareFirstRung());
+        SmartDashboard.putData("ClimbFirstRung",new ClimbFirstRung());
+        SmartDashboard.putData("TopPulleyExtend1",new TopPulleyExtend(45f,80f,.8f,.1f));
+        SmartDashboard.putData("TopPulleyExtend2",new TopPulleyExtend(45f,65f,.8f,.1f));
+        SmartDashboard.putData("TopPulleyClimb1",new TopPulleyClimb(42f,-.3f,.1f));
+        SmartDashboard.putData("TopPulleyClimb2",new TopPulleyClimb(26f,-.9f,.1f));
+        SmartDashboard.putData("TopPulleyCreep",new TopPulleyCreep(-.15f));
+        SmartDashboard.putData("ExtendSidePulleys",new SidePulleysExtend(36f,36f,80f,80f,.9f,.9f,.5f,.5f));
+        SmartDashboard.putData("SidePulleysClimb",new SidePulleysClimb(false,6.5f,6.5f,.1f,.1f,-.8f,-.7f));
+       
+        
+        
         
         
     }

@@ -40,7 +40,7 @@ public class ClimbNextRung extends CommandGroup {
         // during the CreepTape commands, we do not adjust the angle of the tape.
         // because the tapelength should not change enough to matter.
         //
-        addParallel (new TopPulleyCreepTape(-.1,60));
+        addParallel (new TopPulleyCreep(-.15));
         //
         addSequential(new LeftSetPawl(false));
         addSequential(new RightSetPawl(false));
@@ -49,11 +49,11 @@ public class ClimbNextRung extends CommandGroup {
         // at an angle that will allow them to hook the rung.
         //  Hold position with the center tape while they do this.
         //  
-        addSequential(new ExtendSidePulleys(36.,36.,80.,80.,.9,.9,.5,.5));
+        addSequential(new SidePulleysExtend(36f,36f,80f,80f,.9f,.9f,.5f,.5f));
         //
         // 6. Now lower the side rods to hook the rung. 
         //
-        addSequential(new ExtendSidePulleys(36.,36.,60.,60.,.9,.9,.5,.5));
+        addSequential(new SidePulleysExtend(36f,36f,60f,60f,.9f,.9f,.5f,.5f));
         // 7..Pause sides
         //
         addSequential (new SidePause());
@@ -65,7 +65,7 @@ public class ClimbNextRung extends CommandGroup {
         //
          addSequential (new LeftSetPawl(true));
          addSequential (new RightSetPawl(true));
-         addSequential (new ClimbWithSidePulleys(false,20,20,-.8,-.7,.5,.5));
+         addSequential (new SidePulleysClimb(false,20f,20f,-.8f,-.7f,.5f,.5f));
         //
         // 9. Lift up center rod angle 
         //
@@ -75,6 +75,6 @@ public class ClimbNextRung extends CommandGroup {
         // 10. Retract sidetapes to 6.5 inch
         //
         //
-        addSequential(new ClimbWithSidePulleys(false,6.5,6.5,.1,.1,-.8,-.7));
+        addSequential(new SidePulleysClimb(false,6.5f,6.5f,.1f,.1f,-.8f,-.7f));
     }
 }

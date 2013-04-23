@@ -39,11 +39,11 @@ public class RightRodFollowTape extends CommandBase {
         SmartDashboard.putNumber("rightFollowTape TapeLength right", tapelength);
         SmartDashboard.putNumber("rightFollowTape Frame Angle ",
                     SI.getrFrameAngle());
-       dtapeangle = FrameMath.getClimbTapeAngle(floor, tapelength, pulley);
+       dtapeangle = FrameMath.getClimbTapeAngle(floor, (float)tapelength, pulley);
        SmartDashboard.putNumber("rightFollowTape Climb Tape Angle", 
-               FrameMath.getClimbTapeAngle(floor, tapelength, pulley));
+               FrameMath.getClimbTapeAngle(floor, (float)tapelength, pulley));
         SmartDashboard.putNumber("rightFollowTape Servo Value",
-       FrameMath.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal,pulley));
+       FrameMath.calcServoFromAngle(true, (float)Math.toRadians(dtapeangle), (float)tapegoal,pulley));
         rightrod.adjustAngleClimbing(floor);
     }
 
@@ -52,7 +52,7 @@ public class RightRodFollowTape extends CommandBase {
         // when is this finished? when tapelength within .5 icnes
         double t1;
         t1 = rightrod.getTapeLength();
-        return (Math.abs(t1 - this.tapegoal) < error);
+        return (Math.abs(t1 - (float)this.tapegoal) < error);
     }
 
     // Called once after isFinished returns true
