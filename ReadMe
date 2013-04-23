@@ -1,6 +1,7 @@
-This code controls a robot designed by team 1160 for the 2013 First Robotics competition. The robot will climb the the pyramid using three arms that grasp the the rungs. Each arm has three controllable components.
-Overview of the mechanism
-1. A winch, consisting of a section of tapemeasure, about 4 feet in length with a hook riveted to one end, wraps around a 2 inch drum attached to an AndyMark gear motor. The drum is bolted to a gear matched to a pawl (2.) which provides a ratchet mechanism. The sections of tape are actually two sections, taped together with their concave faces facing each other
+This code controls a robot designed by team 1160 for the 2013 First Robotics competition. The robot will climb the the pyramid using three arms that grasp the rungs. Each arm has three controllable components.
+Overview of the arm mechanism
+
+1. A winch, consisting of a section of tape measure, about 4 feet long with a hook riveted to one end, which wraps around a 2 inch drum attached to an AndyMark gear motor. The drum is bolted to a gear matched to a pawl (2.) which together provides a ratchet mechanism. The sections of tape are actually two sections, taped together with their concave faces facing each other, to form a kind of squashed ellips in cross section.
 2. A position of the pawl, locked or unlocked, is controlled by a servo.
 3. Two carbon fiber rods, 1/8 inch in diameter and about 4 feet in length, are fastened at one end to a two inch gear on a gearbox controlled by another servo (hiteC 5465). This gearbox is mounted above and behind the winch.  The other ends of the rods are attached to a swivel bolted to the hook at the end of the tape. The position of the servo determines the angle of the rod ends relative to the frame of the robot, which in turn determines the angle of the 
 
