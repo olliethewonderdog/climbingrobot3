@@ -23,7 +23,7 @@ public class TopRodDoNothing extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     // Sets servo to current value
     protected void execute() {
-         double s;
+         float s;
         s=toprod.getRodServo();
         toprod.setRodServoValue(s);
          SmartDashboard.putNumber("Doing nothing top Rod servo value=",s );

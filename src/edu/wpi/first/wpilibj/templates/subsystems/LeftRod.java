@@ -23,9 +23,9 @@ public class LeftRod extends Rod{
         pulleyNumber=1;
         servo.setBounds(244,0,0,0,11);
     }
-    public double getTapeLength() {
-        double v =SI.getLeft();
-        double length= FrameMath.potParam [pulleyNumber][0]*v+
+    public float getTapeLength() {
+        float v =(float)SI.getLeft();
+        float length= FrameMath.potParam [pulleyNumber][0]*v+
                 FrameMath.potParam [pulleyNumber][1];
         return length; 
     }

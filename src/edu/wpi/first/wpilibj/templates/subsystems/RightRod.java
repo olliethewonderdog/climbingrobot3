@@ -24,9 +24,9 @@ public class RightRod extends Rod {
         pulleyNumber=2;
         servo.setBounds(244,0,0,0,11);
     }
-    public double getTapeLength() {
-        double v =SI.getRight();
-        double length= FrameMath.potParam [pulleyNumber][0]*v+
+    public float getTapeLength() {
+        float v =(float)SI.getRight();
+        float length= FrameMath.potParam [pulleyNumber][0]*v+
                 FrameMath.potParam [pulleyNumber][1];
         return length; 
     }

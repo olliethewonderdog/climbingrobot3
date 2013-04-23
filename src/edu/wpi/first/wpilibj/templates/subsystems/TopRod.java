@@ -22,9 +22,9 @@ public class TopRod extends Rod {
     /**
      * Gets potentiometer voltage from SI and applies the calibrated parameters.
      */ 
-    public double getTapeLength() {
-        double v=SI.getTop();
-        double length=FrameMath.potParam [pulleyNumber][0]*v+
+    public float getTapeLength() {
+        float v=(float)SI.getTop();
+        float length=FrameMath.potParam [pulleyNumber][0]*v+
                 FrameMath.potParam [pulleyNumber][1];
         return length; 
     }

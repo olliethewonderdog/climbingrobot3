@@ -12,18 +12,18 @@ import edu.wpi.first.wpilibj.templates.SI;
  */
 public class TopRodFollowTape extends CommandBase {
     private boolean floor;
-    private double tapegoal;
-    private double error;
+    private float tapegoal;
+    private float error;
     private int pulley;
     SmartDashboard smartdashboard;
     
-    public TopRodFollowTape(boolean floor, double tapeGoal) {
+    public TopRodFollowTape(boolean floor, float tapeGoal) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(toprod);
         this.floor = floor;
         this.tapegoal = tapeGoal;
-        this.error=.3;
+        this.error=.3f;
         this.pulley=0;
     }
     // Called just before this Command runs the first time
@@ -33,17 +33,17 @@ public class TopRodFollowTape extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-       double tapelength;
-       double dtapeangle;
+       float tapelength;
+       float dtapeangle;
        tapelength = toprod.getTapeLength();
        SmartDashboard.putNumber("topFollowTape TapeLength top", tapelength);
        SmartDashboard.putNumber("topFollowTape Frame Angle ",
                     SI.getrFrameAngle());
-       dtapeangle = FrameMath.getClimbTapeAngle(floor, tapelength, pulley);
+       dtapeangle = FrameMath.getClimbTapeAngle(floor, (float)tapelength, pulley);
        SmartDashboard.putNumber("topFollowTape Climb Tape Angle", 
-               FrameMath.getClimbTapeAngle(floor, tapelength, pulley));
+               FrameMath.getClimbTapeAngle(floor, (float)tapelength, pulley));
        SmartDashboard.putNumber("topFollowTape Servo Value",
-       FrameMath.calcServoFromAngle(true, Math.toRadians(dtapeangle), tapegoal,pulley));
+       FrameMath.calcServoFromAngle(true, (float)Math.toRadians(dtapeangle), (float)tapegoal,pulley));
        
         toprod.adjustAngleClimbing(floor);
     }

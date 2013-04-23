@@ -17,7 +17,7 @@ public abstract class Rod extends Subsystem {
      /** @param dTapeAngle angle of tape to frame in degrees while climbing
      * returned by getClimbTapeAngle
      */
-    protected double dTapeAngle;
+    protected float dTapeAngle;
     
     /**
      * Servo travels 360 degrees in 72 seconds 50 degrees per second or 1 degree
@@ -30,9 +30,9 @@ public abstract class Rod extends Subsystem {
      *
      * @param maxServoVelocity is maximum servo velocity per above
      */
-    protected double maxServoVelocity;
-    protected double servoError;
-    protected double servoErrorMultiplier;
+    protected float maxServoVelocity;
+    protected float servoError;
+    protected float servoErrorMultiplier;
     int pulleyNumber;
     Servo servo;
     SmartDashboard smartdashboard;
@@ -44,9 +44,9 @@ public abstract class Rod extends Subsystem {
      */
     public Rod(String name) { 
         super(name);
-        maxServoVelocity = .006 ;
-        servoError = .005;
-        servoErrorMultiplier=1.2;
+        maxServoVelocity = .006f ;
+        servoError = .005f;
+        servoErrorMultiplier=1.2f;
         count=0;
         setCount=0;
     }
@@ -57,10 +57,10 @@ public abstract class Rod extends Subsystem {
     public void adjustAngleClimbing(boolean flr) {
         //get tapelength from Pulley
         boolean floor = flr;
-        double currTapeLen = this.getTapeLength();
-        double dTpAn = FrameMath.getClimbTapeAngle(floor, currTapeLen, pulleyNumber);
-        double rTpAn=Math.toRadians(dTpAn);
-        double dServVal =FrameMath.calcServoFromAngle(false,rTpAn,currTapeLen,
+        float currTapeLen = (float)this.getTapeLength();
+        float dTpAn = FrameMath.getClimbTapeAngle(floor, currTapeLen, pulleyNumber);
+        float rTpAn=(float)Math.toRadians(dTpAn);
+        float dServVal =FrameMath.calcServoFromAngle(false,(float)rTpAn,(float)currTapeLen,
                 pulleyNumber);
         // Sets the servo by position given the current tape length
         this.setRodServoValue(dServVal);
@@ -72,11 +72,11 @@ public abstract class Rod extends Subsystem {
      * servo velocity. Gives value of incremental change in servo value per cycle
      * @param dTaAn goal angle of tape to frame in degrees
      */
-    public void setRodAngleFree(double serVeloc, double dTaAn) {
+    public void setRodAngleFree(float serVeloc, float dTaAn) {
         //need current frameangle and tapelength for next calculations
-        double currTapeLen =this.getTapeLength();
+        float currTapeLen =this.getTapeLength();
         // calculates servo value to achieve target angle at current tape length
-        double dServVal = FrameMath.calcServoFromAngle(true, Math.toRadians(dTaAn),
+        float dServVal = FrameMath.calcServoFromAngle(true, (float)Math.toRadians(dTaAn),
                 currTapeLen,pulleyNumber);
         // makes a small incremental change to servo value chasing goal angle
         setRodServoVelocity(serVeloc, dServVal, servoError);
@@ -88,7 +88,7 @@ public abstract class Rod extends Subsystem {
      * @return has servo hit target within error of 20% above servoError .005
      * about 1.5 degrees
      */
-    public boolean isServoFinished(double target) {
+    public boolean isServoFinished(float target) {
         SmartDashboard.putNumber("Rod isServofinished" 
                 +"Math.abs(servo.get() - target)", Math.abs(servo.get() - target));
         SmartDashboard.putNumber("Rod isServofinished" 
@@ -102,19 +102,19 @@ public abstract class Rod extends Subsystem {
      *
      * @return
      */
-    public double getRodServo() {
-        return servo.get();
+    public float getRodServo() {
+        return (float)servo.get();
     }
     /**
      *
      * @return
      */
-    public abstract double getTapeLength() ;
+    public abstract float getTapeLength() ;
     /**
      *
      * @param val
      */
-    public void setRodServoValue(double val) {
+    public void setRodServoValue(float val) {
        // setCount =setCount+1;
        // SmartDashboard.putNumber("setRodServValue"
            //     +"setCount", setCount);
@@ -124,7 +124,7 @@ public abstract class Rod extends Subsystem {
             servo.set(val);
           //  setCount=0;
       //  }
-        double checkval =servo.get();
+        float checkval =(float)servo.get();
         SmartDashboard.putNumber("setRodServValue  "
                 +"checkval", checkval);
     }
@@ -159,8 +159,8 @@ public abstract class Rod extends Subsystem {
      * @return new value for the rod servo that is a small increment to its
      * previous value
      */
-    public void setRodServoVelocity(double serVel, double goalVal, double tolerance){
-        double curVal = servo.get();
+    public void setRodServoVelocity(float serVel, float goalVal, float tolerance){
+        float curVal = (float)servo.get();
         count = count +1 ;
         SmartDashboard.putNumber("setRodServoVelocity"
                 +"curVal", curVal);
@@ -174,15 +174,15 @@ public abstract class Rod extends Subsystem {
                 +"tolerance", tolerance);
          
          // Check servo  velocity out of bounds
-         if (serVel > 1) 
+         if (serVel > 1f) 
          {
-            serVel = 1.;
+            serVel = 1.f;
          }
-         if (serVel < 0.1) 
+         if (serVel < 0.1f) 
          {
-            serVel = 0.1;
+            serVel = 0.1f;
          }
-         double increVal = serVel * maxServoVelocity;
+         float increVal = serVel * maxServoVelocity;
          SmartDashboard.putNumber("setRodServoVelocity"
                 +"maxServoVelocity", maxServoVelocity);
         
@@ -190,7 +190,7 @@ public abstract class Rod extends Subsystem {
         // exceeds the tolerance, cut the increment in half.
          while (increVal > Math.abs(goalVal-curVal)) 
          {
-            increVal = .5 * Math.abs(goalVal-curVal);
+            increVal = .5f * (float)Math.abs((float)goalVal-(float)curVal);
          }
              SmartDashboard.putNumber("setRodServoVelocity"
                 +"increVal", increVal);
