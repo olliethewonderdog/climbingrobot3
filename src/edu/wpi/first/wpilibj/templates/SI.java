@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 /**
  *
  * @author laptop
@@ -17,11 +18,6 @@ public class SI {
      * It contains functions which read the gyros and potentiometers.
      * It is never instantiated. Its variables and methods are static so they
      * can be called in static contexts
-     * It holds the state of a couple of key control commands
-     * These two variables allow operator control during autonomous climbing.
-     * They signal when the middle pulley can stop stalling. and allow the 
-     * command groups to pause at intervals to wait for the "nextCommand"
-     * Arguably these last two should go in OI
      */ 
    protected static AnalogChannel top;
    protected static AnalogChannel left;
@@ -29,32 +25,36 @@ public class SI {
    protected static Gyro gyro;
     public SI() {
         top = new AnalogChannel(RobotMap.TOP_PULLEY_CHAN);
+         LiveWindow.addSensor("TopPulley", "pot voltage", top);
         left = new AnalogChannel(RobotMap.LEFT_PULLEY_CHAN);
+         LiveWindow.addSensor("LeftPulley", "pot voltage", left);
         right = new AnalogChannel(RobotMap.RIGHT_PULLEY_CHAN);
-        gyro = new Gyro (RobotMap.GYRO_CHAN);     
+         LiveWindow.addSensor("RightPulley", "pot voltage", right);
+        gyro = new Gyro (RobotMap.GYRO_CHAN);   
+        LiveWindow.addSensor("", "gyro", gyro);
     }
-    public static double getTop () {
-        double v;
-                v=top.getVoltage();
+    public static float getTop () {
+        float v;
+                v=(float)top.getVoltage();
            return v;
 }
-     public static double getLeft () {
-        double v;
-                v=left.getVoltage();
+     public static float getLeft () {
+        float v;
+                v=(float)left.getVoltage();
            return v;
 }
-      public static double getRight () {
-        double v;
-                v=right.getVoltage();
+      public static float getRight () {
+        float v;
+                v=(float)right.getVoltage();
            return v;
 }
    // Returns the angle of the frame in radians, because thats what we need them in most the time
     
-    public static double getrFrameAngle() {
-        return Math.toRadians(gyro.getAngle());
+    public static float getrFrameAngle() {
+        return (float)Math.toRadians(gyro.getAngle());
     }
-    public static double getdFrameAngle() {
-        return gyro.getAngle();
+    public static float getdFrameAngle() {
+        return (float)gyro.getAngle();
     }
     public static void reset() {
         gyro.reset();

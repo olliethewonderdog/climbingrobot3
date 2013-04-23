@@ -11,17 +11,17 @@ import edu.wpi.first.wpilibj.templates.SI;
  * @author Brinton
  */
 public class LeftPulleySetLength extends CommandBase {
-    private double tapeLength;
-    private double error;
-    private double speed;
+    private float tapeLength;
+    private float error;
+    private float speed;
     private int  extending;
-    private double curLength;
+    private float curLength;
     private boolean setLock;
-    private double rspeed;
+    private float rspeed;
     //
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-   public LeftPulleySetLength(double T, double e,double s) {
+   public LeftPulleySetLength(float T, float e,float s) {
         requires(leftpulley);                                
            tapeLength = T;
         speed=Math.abs(s);
@@ -74,11 +74,11 @@ public class LeftPulleySetLength extends CommandBase {
          // you get a negative error
         if ((-extending * (curLength - tapeLength)) < 1)
         {
-           rspeed = .8*speed;
+           rspeed = .8f*speed;
         }
         if ((-extending * (curLength - tapeLength)) < .5)
         {
-           rspeed = .5*speed;
+           rspeed = .5f*speed;
         }
          leftpulley.setTape(extending * rspeed );
     }
@@ -102,7 +102,7 @@ public class LeftPulleySetLength extends CommandBase {
         // if I overshoot retracting, the current error will be negative,ie
         // plus times minus < 0
         // minus times plus < 0
-        double curError= -extending * (curLength - tapeLength);
+        float curError= -extending * (curLength - tapeLength);
         
        if (curError < 0)
        {SmartDashboard.putNumber("LeftPulleySetLength"

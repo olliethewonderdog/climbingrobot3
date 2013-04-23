@@ -1,5 +1,6 @@
 package edu.wpi.first.wpilibj.templates.subsystems;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.FrameMath;
 import edu.wpi.first.wpilibj.templates.SI;
@@ -16,6 +17,7 @@ public class TopRod extends Rod {
         super("topRod");
         servo = new Servo(RobotMap.P_TOP_SERVO_CAR,
                 RobotMap.P_TOP_SERVO_CHAN); 
+        LiveWindow.addActuator("topRod","servo Value",servo);
         pulleyNumber=0;
         servo.setBounds(244,0,0,0,11);
     }

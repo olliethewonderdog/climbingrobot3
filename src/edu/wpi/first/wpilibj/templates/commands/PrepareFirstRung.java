@@ -19,7 +19,7 @@ public class PrepareFirstRung extends CommandGroup {
     public PrepareFirstRung() {
         SI.reset();
         Timer.delay(.5);
-        double dFrameAngle=SI.getdFrameAngle();
+        float dFrameAngle=SI.getdFrameAngle();
         SmartDashboard.putNumber("PrepareFirstRung dFrameangle ",dFrameAngle);
        // addSequential(new LeftSetPawl(false));
         //addSequential(new RightSetPawl(false));
@@ -29,7 +29,7 @@ public class PrepareFirstRung extends CommandGroup {
         //addParallel(new RightRodAngleFree(75, 31));
         //addParallel(new RightPulleySetLength(31, .1, .8));
        addParallel(new TopRodAngleFree(60,20));
-       addParallel(new TopPulleySetLength(20, .1, 1));
+       addParallel(new TopPulleySetLength(20f, .1f, 1));
         addSequential(new WaitForChildren());
     }
 }

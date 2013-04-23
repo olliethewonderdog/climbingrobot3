@@ -21,23 +21,23 @@ public abstract class Pulley extends PIDSubsystem {
     /**
      * Length of hook is added to tape true for all hooks
      */
-    protected double hooklen;
+    protected float hooklen;
     // Maximum, minimum,and starting  tapelengths are particular to each pulley
-    public double tapeLenMax;
-    public  double tapeLenMin ;
-    protected double initialTapeLen ;
+    public float tapeLenMax;
+    public  float tapeLenMin ;
+    protected float initialTapeLen ;
     protected int pulleyNumber;
     /**
      * Motor direction is +1 or -1 depending on its orientation in the robot
      */
     public int direct ;
     // The PWM values for the open and locked postions of the pawl
-    protected double pawlLock  ;
-    protected double pawlOpen ;
+    protected float pawlLock  ;
+    protected float pawlOpen ;
     // Error limits for the setTapelength method
-    protected int pulleyErrorMax;
-    protected  double pulleyErrorMin ;
-    protected double pulleyErrorDef;
+    protected float pulleyErrorMax;
+    protected  float pulleyErrorMin ;
+    protected float pulleyErrorDef;
     /**
      * State of pawl lock
      */
@@ -49,12 +49,12 @@ public abstract class Pulley extends PIDSubsystem {
     /**
      * Initialize the subsystem here
      */
-    public Pulley(String name, double p, double i, double d) {
+    public Pulley(String name, float p, float i, float d) {
         super(name, p, i, d);  
         hooklen=0 ;
-        pulleyErrorMax=1;
-        pulleyErrorMin=.1 ;
-        pulleyErrorDef=.15;
+        pulleyErrorMax=1f;
+        pulleyErrorMin=.1f ;
+        pulleyErrorDef=.15f;
     }
          //Set the starting setpoint and have PID start running in the background
         // These are  commented out because it starts in starts in joystick mode.
@@ -67,9 +67,10 @@ public abstract class Pulley extends PIDSubsystem {
      * abstract because it reads a particular potentiometer
      * @return tape length in inches
      */
-      public abstract double getTapeLength() ;
+      public abstract float getTapeLength() ;
     
-      public void setTape(double velocity) {
+      public void setTape(float velocity) {
+          velocity=Math.max(Math.min(velocity,1f),-1f);
         // speed is positive to extend, negative to retract
         // if there is an attempt to extend a locked pulley, Don't do it. 
         // stop motor and return
@@ -98,26 +99,25 @@ public abstract class Pulley extends PIDSubsystem {
      * is 1 if you're extending and -1 if you are retracting We are trying to
      * avoid using the PID with this simple a
      */
-    public void setTapeLength(double goalLength, double error,double velocity) {
+    public void setTapeLength(float goalLength, float error,float velocity) {
         //Velocity is supposed to be positive if extending negative if retractin
         // but we just use the absolute value and the goal Length to determine
         //direction.
         // Check for out of bounds tapelength goals
          goalLength=Math.max(Math.min(goalLength,tapeLenMax),tapeLenMin);
-        double curLength = getTapeLength();
+        float curLength = getTapeLength();
         /* if there is an attempt to extend a locked pulley, Don't do it. stop motor
         * and return
         * Change outcome to unlock and extend?
         */
-      double extending =1;  
+      float extending =1;  
         if (curLength-goalLength>0) extending=-1;
         if (pawlLocked = true & (extending > 0)) {
             pulleyMotor.set(0);
             return;
         }
-        if (error > pulleyErrorMax || error < pulleyErrorMin) { //check for bad error value
-            error = pulleyErrorMin;
-        }
+        error=Math.max(Math.min(error,pulleyErrorMax),pulleyErrorMin);
+        
         // "extending" is either +1 or -1
         // If longer is positive, the current length will be <  the goal length
         // If longer is negative, the current length will be > the goal length
@@ -131,7 +131,7 @@ public abstract class Pulley extends PIDSubsystem {
         // Just in case I'll add a slow down whe we get within an inch
         //
         if ((-extending * (curLength - goalLength)) < 1) {
-           velocity = .8* Math.abs(velocity);
+           velocity = .8f* (float)Math.abs(velocity);
         }
         if ((-extending * (curLength - goalLength)) > error) {
             // sign of velocity is adjusted 
@@ -183,15 +183,15 @@ public abstract class Pulley extends PIDSubsystem {
          */
         else
         {
-         double minimumTapeExtension=.4;
+         float minimumTapeExtension=.4f;
          int tapeRetractIterations=5;
-         double retractionVelocity=-.2;
-         double waitTimePerIteration=.07;
-         double extensionVelocity=.4;
-         double waitTimePerAttemptedRetraction=.2;
+         float retractionVelocity=-.2f;
+         float waitTimePerIteration=.07f;
+         float extensionVelocity=.4f;
+         float waitTimePerAttemptedRetraction=.2f;
          //
          pawl.set(pawlOpen);
-           double startLength=this.getTapeLength();
+           float startLength=this.getTapeLength();
            int count=1;
            // Do this loop until the tape has extended .5 inches
            // currently stays in this loop until 
@@ -240,7 +240,7 @@ public abstract class Pulley extends PIDSubsystem {
      * output to the motor.
      */
     
-    protected void usePIDOutput(double output) {
+    protected void usePIDOutput(float output) {
         pulleyMotor.set(output);
 
     }

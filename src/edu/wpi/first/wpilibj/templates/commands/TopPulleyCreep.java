@@ -11,11 +11,11 @@ import  edu.wpi.first.wpilibj.templates.OI;
  * @author laptop
  */
 public class TopPulleyCreep extends CommandBase {
-     double speed;
-     double time;
+     float speed;
+     float time;
    
     
-    public TopPulleyCreep(double s) {
+    public TopPulleyCreep(float s) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(toppulley);
@@ -38,7 +38,7 @@ public class TopPulleyCreep extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
-         leftpulley.setTape(0.);
+         leftpulley.setTape(0.f);
     }
 
     // Called when another command which requires one or more of the same

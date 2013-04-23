@@ -4,6 +4,7 @@
  */
 package edu.wpi.first.wpilibj.templates.subsystems;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.commands.LeftRodDoNothing;
 import edu.wpi.first.wpilibj.templates.FrameMath;
@@ -20,6 +21,7 @@ public class LeftRod extends Rod{
         super("LeftRod");
         servo = new Servo(RobotMap.P_LEFT_SERVO_CAR,
                 RobotMap.P_LEFT_SERVO_CHAN);
+         LiveWindow.addActuator("leftRod","servo Value",servo);
         pulleyNumber=1;
         servo.setBounds(244,0,0,0,11);
     }

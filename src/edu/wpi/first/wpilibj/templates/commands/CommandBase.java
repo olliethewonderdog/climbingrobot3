@@ -58,11 +58,6 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData("TopPulleyCreep",new TopPulleyCreep(-.15f));
         SmartDashboard.putData("ExtendSidePulleys",new SidePulleysExtend(36f,36f,80f,80f,.9f,.9f,.5f,.5f));
         SmartDashboard.putData("SidePulleysClimb",new SidePulleysClimb(false,6.5f,6.5f,.1f,.1f,-.8f,-.7f));
-       
-        
-        
-        
-        
     }
     public CommandBase(String name) {
         super(name);

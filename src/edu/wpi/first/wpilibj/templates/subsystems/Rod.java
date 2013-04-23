@@ -100,7 +100,7 @@ public abstract class Rod extends Subsystem {
     // servo angle controlled by joystick
     /**
      *
-     * @return
+     * @return the value of the servo from 0 to 1
      */
     public float getRodServo() {
         return (float)servo.get();

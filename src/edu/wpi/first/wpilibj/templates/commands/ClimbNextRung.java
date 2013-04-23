@@ -13,21 +13,32 @@ public class ClimbNextRung extends CommandGroup {
     public ClimbNextRung() {
         //1.Extend top pulley to 45 inches while maintaining rod angle of 80 
         // degreesto horizon. Then pause
-         addParallel(new TopPulleySetLength(45,.1,1));
-         addParallel(new TopRodAngleFree(80,45));
-         addSequential (new WaitForChildren());
-         addSequential (new TopPause());
+        addSequential(new TopPulleyExtend(45f,80f,1f,.1f));
+        addSequential(new TopPulleyExtend(45f,60f,.8f,.2f));
+        addSequential(new TopPulleyClimb(42f,-.3f,.1f));
+        addSequential(new TopPulleyClimb(26f,-.9f,.1f));
+        addSequential(new  TopPulleyCreep(-.15f));
+        addSequential(new LeftSetPawl(false));
+        addSequential(new RightSetPawl(false));
+        addSequential(new SidePulleysExtend(36f,36f,80f,80f,.9f,.9f,.5f,.5f));
+         addSequential (new LeftSetPawl(true));
+         addSequential (new RightSetPawl(true));
+        addSequential(new SidePulleysClimb(false,6.5f,6.5f,.1f,.1f,-.8f,-.7f));
+        // addParallel(new TopPulleySetLength(45f,.1f,1));
+        // addParallel(new TopRodAngleFree(80f,45f));
+         //addSequential (new WaitForChildren());
+         //addSequential (new TopPause());
          // resume when apprppriate
         // 2.Lower the top rod to 60 degrees relative to horizon to hook rung 
          // and pause
-         addSequential(new TopRodAngleFree(60,45));
-         addSequential(new TopPause());
+         //addSequential(new TopRodAngleFree(60f,45f));
+        // addSequential(new TopPause());
          //
         // 3. Retract top tape to 26 inches 
         //
-         addParallel (new TopPulleySetLength(26,.1,-1));
-         addParallel (new TopRodFollowTape(false, 26));
-         addSequential (new WaitForChildren());
+        // addParallel (new TopPulleySetLength(26f,.1f,-1));
+        // addParallel (new TopRodFollowTape(false, 26));
+        // addSequential (new WaitForChildren());
          //  
         // 4. Unlock pawls on sides while creeping center tape.
         // Issue: since the top pulley does not have a pawl
@@ -40,7 +51,7 @@ public class ClimbNextRung extends CommandGroup {
         // during the CreepTape commands, we do not adjust the angle of the tape.
         // because the tapelength should not change enough to matter.
         //
-        addParallel (new TopPulleyCreep(-.15));
+        addParallel (new TopPulleyCreep(-.15f));
         //
         addSequential(new LeftSetPawl(false));
         addSequential(new RightSetPawl(false));
@@ -69,8 +80,8 @@ public class ClimbNextRung extends CommandGroup {
         //
         // 9. Lift up center rod angle 
         //
-         addParallel(new TopPulleySetLength(28,.1,.5));
-         addParallel(new TopRodAngleFree(85,28));
+         addParallel(new TopPulleySetLength(28f,.1f,.5f));
+         addParallel(new TopRodAngleFree(85f,28f));
         //
         // 10. Retract sidetapes to 6.5 inch
         //

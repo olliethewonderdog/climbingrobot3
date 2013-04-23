@@ -10,18 +10,18 @@ import edu.wpi.first.wpilibj.templates.SI;
  * @author Brinton
  */
 public class RightPulleySetLength extends CommandBase {
-    private double tapeLength;
-    private double error;
-    private double speed;
+    private float tapeLength;
+    private float error;
+    private float speed;
     private int    extending;
-    private double curLength;
+    private float curLength;
     private boolean setLock;
-    private double rspeed;
-    private double curError;
+    private float rspeed;
+    private float curError;
     //
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-   public RightPulleySetLength(double T, double e,double s) {
+   public RightPulleySetLength(float T, float e,float s) {
         requires(rightpulley);                                
           tapeLength = T;
         speed=Math.abs(s);
@@ -74,11 +74,11 @@ public class RightPulleySetLength extends CommandBase {
          // you get a negative error
         if ((-extending * (curLength - tapeLength)) < 1)
         {
-           rspeed = .8*speed;
+           rspeed = .8f*speed;
         }
         if ((-extending * (curLength - tapeLength)) < .5)
         {
-           rspeed = .5*speed;
+           rspeed = .5f*speed;
         }
          rightpulley.setTape(extending * rspeed );
     }
