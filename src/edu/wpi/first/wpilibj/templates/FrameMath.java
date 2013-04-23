@@ -22,15 +22,15 @@ public final class FrameMath {
     //rightservomin .385 back 157
     //midservomax  .78    -10   180 forward//.751= -10 degrees delta 190
     //midservomin  .1  back 18o
-     public static double [] [] potParam =
+     public static float [] [] potParam =
     { // [row,column]
         //order of rows is
         //mid 0
         //left 1
         //right 2
-        {16.1,8.12},
-        {-15.2,62.6},
-        {15.15,3.25}
+        {16.1f,8.12f},
+        {-15.2f,62.6f},
+        {15.15f,3.25f}
     };
 
     /**
@@ -38,39 +38,39 @@ public final class FrameMath {
      * the higher pyramid rungs above the middle of the next lower rung
      * (formerly k2)
      */
-    protected  static double RNGVERDIST = 30.75;
+    protected  static float RNGVERDIST = 30.75f;
     /**
      * @param static RNGHORIZDIST is horizontal distance between rungs
      *  (formerly k3)
      */
-    protected  static double RNGHORIZDIST = 12.1;
+    protected  static float RNGHORIZDIST = 12.1f;
     /**
      * @param FLRHANGLENG tapelength at which the robot climbing from the floor
      * breaks free 
      */
-    protected  static double FLRHANGLENG = 10.5;
+    protected  static float FLRHANGLENG = 10.5f;
     /**
      * @param BUMPHITANG frame angle at which the rear bumper touches the floor
      * when climbing first rung
      */
-    protected  static double BUMPHITANG = 25;
+    protected  static float BUMPHITANG = 25f;
     // 
     /**
      * @param RUNGHANGANG the frame angle condition at which robot breaks free
      * while climbing between rungs
      */
-    protected static double RUNGHANGANG = 52;
+    protected static float RUNGHANGANG = 52f;
     /**
      * @param RUNGHANGLENG tapelength condition at which robot breaks free while
      * climbing between rungs
      */
-    protected static double RUNGHANGLENG = 13;
+    protected static float RUNGHANGLENG = 13f;
     /**
     
      * @param dMaxDeflec maximum deflection of tape at 0 angle and full
      * extension
      */
-    protected static double dMaxDeflec = 4;
+    protected static float dMaxDeflec = 4f;
     SmartDashboard smartdashboard;
 
     public FrameMath(){};
@@ -80,9 +80,9 @@ public final class FrameMath {
      * the robot is climbing. It needs to know:
      *
      * @param floor --boolean Are We climbing from the floor?
-     * @param T --double the tapelength, obtained thru a formula based on pot
+     * @param T --float the tapelength, obtained thru a formula based on pot
      * value, reflecting how much the pulley has turned.
-     * @param rFrAng -- double The angle of the frame to horizontal in radians
+     * @param rFrAng -- float The angle of the frame to horizontal in radians
      * retrieved from the Gyro, The calculations are complex, involving a lot of
      * trig and the quadratic formulae, but are derived from the robot geometry
      * and the pyramid geometry. The crucial states are: Are we climbing from
@@ -91,16 +91,16 @@ public final class FrameMath {
      *
      * @return angle of tape to frame in degrees
      */
-    public static double getClimbTapeAngle(boolean floor, double T,
+    public static float getClimbTapeAngle(boolean floor, float T,
             int pulley) {
-        double dFrAng =SI.getdFrameAngle();
-        double rFrAng =SI.getrFrameAngle();
-        double rTapeAngFloor;
-        double dTapeAngle;
-        double [] pulleyHeight;
-        double [] [] servRodPosition;
-        pulleyHeight = new double[]{9.5, 1.125, 1.125};
-        double heightPull=pulleyHeight[pulley];
+        float dFrAng =(float) SI.getdFrameAngle();
+        float rFrAng =(float)SI.getrFrameAngle();
+        float rTapeAngFloor;
+        float dTapeAngle;
+        float [] pulleyHeight;
+        float [] [] servRodPosition;
+        pulleyHeight = new float[]{9.5f, 1.125f, 1.125f};
+        float heightPull=pulleyHeight[pulley];
 
         if (floor) // are we climbing from floor
         {
@@ -113,13 +113,13 @@ public final class FrameMath {
                 
                if (dFrAng <= BUMPHITANG) // Rear wheel is touching
                 {
-                dTapeAngle = Math.toDegrees(
+                dTapeAngle =(float)Math.toDegrees(
                     MathUtils.asin((RNGVERDIST - 12.3 * Math.sin(rFrAng))/T));
                 return dTapeAngle;
                 } 
                 else //Rear bumper is touching
                 {
-                dTapeAngle =Math.toDegrees(
+                dTapeAngle =(float)Math.toDegrees(
                     MathUtils.asin( (RNGVERDIST - 18.9 * Math.sin(rFrAng))/T));
                 return dTapeAngle;
                  }
@@ -135,7 +135,7 @@ public final class FrameMath {
             else 
                 if (dFrAng < 91 && dFrAng > 89) //Are we near 90 degrees
                 {
-                rTapeAngFloor = MathUtils.acos((RNGHORIZDIST + heightPull));
+                rTapeAngFloor = (float)MathUtils.acos((RNGHORIZDIST + heightPull));
                 } 
                 else 
                     if (dFrAng < 1 && dFrAng > -1) //Are re we near 0 degrees?
@@ -143,38 +143,38 @@ public final class FrameMath {
                         if (T <= Math.sqrt(MathUtils.pow(RNGVERDIST - heightPull, 2)
                              + MathUtils.pow(RNGHORIZDIST + heightPull, 2)))
                         {
-                           rTapeAngFloor = MathUtils.asin((RNGVERDIST - heightPull) / T);
+                           rTapeAngFloor = (float)MathUtils.asin((RNGVERDIST - heightPull) / T);
                         }
                         else 
                         
-                        rTapeAngFloor = MathUtils.acos((RNGHORIZDIST + heightPull) / T);
+                        rTapeAngFloor = (float)MathUtils.acos((RNGHORIZDIST + heightPull) / T);
                         
                     } 
                     else
                     {    //Ugly quad stuff no need to do unless frame angle notnear 90 or 0 and
                         // near 90 or 0
-                     double k5 = 1 / Math.tan(rFrAng);
-                     double a = (1 + MathUtils.pow(k5, 2));
-                     double k4 = heightPull / Math.sin(rFrAng);
-                     double b = -2 * (RNGVERDIST + k4 * k5 + RNGHORIZDIST * k5);
-                     double c = MathUtils.pow(RNGVERDIST, 2)
-                        + MathUtils.pow(RNGHORIZDIST, 2)
-                        + MathUtils.pow(k4, 2) + 2 * (RNGHORIZDIST * k4) 
-                        - MathUtils.pow(T, 2);
+                     float k5 = 1 / (float)Math.tan(rFrAng);
+                     float a = (1 + (float)MathUtils.pow(k5, 2));
+                     float k4 = heightPull / (float)Math.sin(rFrAng);
+                     float b = -2 * (RNGVERDIST + k4 * k5 + RNGHORIZDIST * k5);
+                     float c = (float)MathUtils.pow(RNGVERDIST, 2)
+                        + (float)MathUtils.pow(RNGHORIZDIST, 2)
+                        + (float)MathUtils.pow(k4, 2) + 2 * (RNGHORIZDIST * k4) 
+                        - (float)MathUtils.pow(T, 2);
                      SmartDashboard.putNumber("getClimbTapeAng getClimbTapeAng "+String.valueOf(pulley)+"Quad k4", k4);
                      SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad k5", k5);
                     
                      SmartDashboard.putNumber(" "+String.valueOf(pulley)+"Quad a", a);
                      SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad b", b);
                      SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad c", c);
-                     double x2 = (-b - Math.sqrt(((b * b) - (4 * a * c)))) / (2 * a);
+                     float x2 = (-b - (float)Math.sqrt(((b * b) - (4 * a * c)))) / (2 * a);
                      SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+" Quad x2", x2);
-                      rTapeAngFloor = MathUtils.atan((RNGVERDIST-x2)
+                      rTapeAngFloor = (float)MathUtils.atan((RNGVERDIST-x2)
                               / (RNGHORIZDIST + k4 - k5 * x2));
                       }
             SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+"dTapeAngFloor",
                                Math.toDegrees(rTapeAngFloor));
-           dTapeAngle = Math.toDegrees(rTapeAngFloor) - dFrAng;
+           dTapeAngle = (float)Math.toDegrees(rTapeAngFloor) - dFrAng;
            SmartDashboard.putNumber("getClimbTapeAng "+String.valueOf(pulley)+ 
                    "dTapeAngle to Frame", dTapeAngle);
            return dTapeAngle;
@@ -207,8 +207,8 @@ public final class FrameMath {
      * climbing
      * @return value of servo to achieve that tape angle at that tape length
      */
-    public static double calcServoFromAngle(boolean droop, 
-            double rTapeAngToFrame, double T,int pulley) {
+    public static float calcServoFromAngle(boolean droop, 
+            float rTapeAngToFrame, float T,int pulley) {
         /**
          * Adjustment for hanging free or freestanding When tape is hanging
          * constrained, the goal is to set the servo to put the tape so it
@@ -224,13 +224,13 @@ public final class FrameMath {
          */
      
        //  inititialize angTapHoriz
-        double rTapeAngToFloor = 0;
-        double rFramAng=SI.getrFrameAngle();
-        double dFramAng=SI.getdFrameAngle();
+        float rTapeAngToFloor = 0;
+        float rFramAng=(float)SI.getrFrameAngle();
+        float dFramAng=(float)SI.getdFrameAngle();
         SmartDashboard.putNumber("calcServoFromAngle dFrameAngle "+String.valueOf(pulley),
                dFramAng);
         //if (dFramAng>10 || dFramAng<-10)rFramAng=0;
-       // double dFramAng=SI.getdFrameAngle();
+       // float dFramAng=SI.getdFrameAngle();
         if (droop) {
             rTapeAngToFloor = rTapeAngToFrame + rFramAng;
         }
@@ -246,13 +246,13 @@ public final class FrameMath {
          * horizontal tape.
          *
          */
-        double droopAdjFact = (T * T * T * Math.cos(rTapeAngToFloor)
-                * Math.cos(rTapeAngToFloor)) / (45 * 45 * 45);
+        float droopAdjFact = (T * T * T * (float)Math.cos(rTapeAngToFloor)
+                *(float) Math.cos(rTapeAngToFloor)) / (45 * 45 * 45);
       //  SmartDashboard.putNumber("droopAdjFactor", droopAdjFact);
         //
         //Add the adjustment to the target angle
         //
-        rTapeAngToFrame = rTapeAngToFrame + Math.toRadians(droopAdjFact * dMaxDeflec);
+        rTapeAngToFrame = rTapeAngToFrame + (float)Math.toRadians(droopAdjFact * dMaxDeflec);
          /**
          * Trig calculation which relates the distance between the rod ends to:
          * T is tape length, rTapeAngToFrame the angle of the tape to the frame, The
@@ -264,30 +264,30 @@ public final class FrameMath {
          * Apply Pythagorean
          * theorem.
          */
-         double [] [] servRodPosition;
-        servRodPosition= new double [][]
+         float [] [] servRodPosition;
+        servRodPosition= new float [][]
         {
             //{servHeightPullBott,servDistBehindPull}
-            {4.5,0.},
-            {4.5,2.5},
-            {4.5,2.5},
+            {4.5f,0.f},
+            {4.5f,2.5f},
+            {4.5f,2.5f},
         };  
          //
-        double servHeightPullBott=servRodPosition [pulley][0];
+        float servHeightPullBott=servRodPosition [pulley][0];
         
        // SmartDashboard.putNumber("CalcServo servHeightPullBott "+String.valueOf(pulley)
           //      + "height", servHeightPullBott);
-        double servDistBehindPull=servRodPosition [pulley][1];
+        float servDistBehindPull=servRodPosition [pulley][1];
         
         //SmartDashboard.putNumber("CalcServo servDistBehind "+String.valueOf(pulley)
          //       + "behind dist", servDistBehindPull);
         /* 
          * now the trig equations
          */ 
-        double j2 = Math.sin(rTapeAngToFrame) * T - servHeightPullBott;
+        float j2 = (float)Math.sin(rTapeAngToFrame) * T - servHeightPullBott;
         SmartDashboard.putNumber("CalcServo rodhookend "+String.valueOf(pulley)
                 + " vert dist j2 ", j2);
-        double j3 = Math.cos(rTapeAngToFrame) * T + servDistBehindPull;
+        float j3 = (float)Math.cos(rTapeAngToFrame) * T + servDistBehindPull;
         SmartDashboard.putNumber("CalcServo rodhookend "+String.valueOf(pulley)
                 + " horz dist j3 ", j3);
         /**
@@ -295,7 +295,7 @@ public final class FrameMath {
          * tape angle to the frame, based on relative position of pulley bottom
          * and servo
          */
-        double rodAxisLeng = Math.sqrt((j2 * j2) + (j3 * j3));
+        float rodAxisLeng = (float)Math.sqrt((j2 * j2) + (j3 * j3));
         SmartDashboard.putNumber("Calc Servo distance betw rod ends j4 "+
                 String.valueOf(pulley),
                 rodAxisLeng);
@@ -314,30 +314,30 @@ public final class FrameMath {
          * array. @param servRodParam, first two columns.
          *
          */
-          double [] [] servRodParam;
-         servRodParam = new double [] []
+          float [] [] servRodParam;
+         servRodParam = new float [] []
                 //only left one is correct
                 //mid
                // left
                //right is now correct
         {
-          {-1.96,172,-.00325,.803},
-          {-2.61,+171,.00325,.276},
-          {-2.61,171,-.00793,1.427}
+          {-1.96f,172f,-.00325f,.803f},
+          {-2.61f,+171f,.00325f,.276f},
+          {-2.61f,171f,-.00793f,1.427f}
         };
-        double mServAngRodAxis  = servRodParam [pulley][0];
-        double kServAngRodAxis = servRodParam [pulley][1]; 
+        float mServAngRodAxis  = servRodParam [pulley][0];
+        float kServAngRodAxis = servRodParam [pulley][1]; 
         //
-        double dServAngRodAxis = mServAngRodAxis*rodAxisLeng + kServAngRodAxis; 
+        float dServAngRodAxis = mServAngRodAxis*rodAxisLeng + kServAngRodAxis; 
        
         SmartDashboard.putNumber("CalcServo Angle of servo j5"+String.valueOf(pulley)+ 
                 " to rod axis deg", dServAngRodAxis);
         /**
          * j6 is the angle the rod axis makes to the tape.
          */
-        double j6;
+        float j6;
         if (j3 != 0) {
-            j6 = Math.toDegrees(MathUtils.atan(j2/j3));
+            j6 = (float)Math.toDegrees(MathUtils.atan(j2/j3));
         } else {
             j6 = 0;
         }
@@ -347,7 +347,7 @@ public final class FrameMath {
          * j7 is the angle that the rod end at the servo makes to the frame. It
          * therefore the servo angle to the frame.
          */
-        double j7 = dServAngRodAxis + j6;
+        float j7 = dServAngRodAxis + j6;
         SmartDashboard.putNumber("Calc Servo Angle of servo "+
                 String.valueOf(pulley)+ "to frame deg", j7);
         /**
@@ -357,13 +357,47 @@ public final class FrameMath {
         * columns of the servRodParam array above
         *
         */
-         double mServAngToServVal=servRodParam[pulley] [2];
-         double kServAngToServVal=servRodParam[pulley] [3];
+         float mServAngToServVal=servRodParam[pulley] [2];
+         float kServAngToServVal=servRodParam[pulley] [3];
         //
-        double sVal = kServAngToServVal
+        float sVal = kServAngToServVal
                 + mServAngToServVal * j7;
         SmartDashboard.putNumber("CalcServo ServoVal"+String.valueOf(pulley)+
                 " value", sVal);
         return sVal;
     }
+    /**
+     * calculates linear regression using least squares method
+     * @param n  number of data points in array
+     * 
+     * @param x x values independent
+     * @param y y values dependents
+     * @return   slope and intercept ina 2 dimensional array
+     */
+    public static float [] linearRegression(int n,float x [], float y [] ){
+        float sumX=0;
+        float sumY=0;  
+        for (int i=0 ;i<n-1;i++){
+        sumX=sumX+x[i];
+        sumY=sumY+y[i];        
+        }
+        float meanX=sumX/n;
+        float meanY=sumY/n;
+        float productDelta=0;  
+        float squareDeltaX=0;
+        float deltaX;
+        float deltaY;
+        for (int i=0 ;i<n-1;i++){
+        deltaX=(meanX-x[i]);
+        deltaY=(meanY-y[i]);               
+        productDelta=productDelta+(deltaX*deltaY);
+        squareDeltaX=squareDeltaX+(deltaX*deltaX);
+        }
+       float [] mk = new float[2];
+        mk[0]=productDelta/squareDeltaX;
+        mk[1]=meanY-mk[0]*meanX;
+        return mk;
+           
+    }
+    
 }
